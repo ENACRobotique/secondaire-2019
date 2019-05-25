@@ -24,7 +24,7 @@ LidarXV11::~LidarXV11() {
 
 void LidarXV11::update(uint8_t byte) {
 	uint16_t checksum_rx;
-	//Serial.println(state);
+	Serial.println(state);
 	switch (state) {
 	case WAIT_START:
 		if (byte == 0xFA){
@@ -155,6 +155,7 @@ void LidarXV11::read_data(int i) {
 	packet.strength[i] = (data[3] << 8) | data[2];
 	distance_angle[(packet.index - 0xA0)  * 4 + i] = packet.distance[i];
 	valid_angle[(packet.index - 0xA0)  * 4 + i] = !packet.invalid[i];
+	//Serial.println(valid_angle[(packet.index - 0xA0)  * 4 + i]);
 
 }
 

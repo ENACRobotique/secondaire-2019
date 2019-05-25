@@ -25,6 +25,7 @@ void LidarManager::init() {
 }
 
 void LidarManager::update() {
+	if(Serial1.available()<1)return;
 	uint8_t b = Serial1.read();
 	lidar.update(b);
 }
@@ -63,7 +64,6 @@ bool LidarManager::is_ignored(int lidarAngle){
 
 	}
 
-	Serial.println(ignored);
 
 	return(ignored);
 }
@@ -85,13 +85,31 @@ bool LidarManager::obstacleDetected(int lidarAngleA, int lidarAngleB){
 	for(int angle = lidarAngleA; angle <= lidarAngleB; angle++){
 		//Serial.print("distance   ");
 		//Serial.println(lidar.get_distance(angle));
-		if(lidar.is_valid(angle) and lidar.get_distance(angle) < DIST_MIN){
-			int x= LidarManager::xObstacle(angle);
-			int y = LidarManager::yObstacle(angle);
+		int x= LidarManager::xObstacle(angle);
+		int y = LidarManager::yObstacle(angle);
 
-			 if(!LidarManager::is_ignored(angle)){
+
+		/*Serial.print(angle);
+		Serial.print("    ");
+		Serial.print(x);
+		Serial.print("    ");
+		Serial.print(y);
+		Serial.print("    ");
+	    Serial.print(lidar.get_distance(angle));
+	    Serial.print("    ");
+	    Serial.print(lidar.is_valid(angle));
+	    Serial.print("    ");
+		Serial.println(LidarManager::is_ignored(angle));*/
+
+		if(lidar.is_valid(angle) and lidar.get_distance(angle) < DIST_MIN){
+
+
+
+			if(!LidarManager::is_ignored(angle)){
 						i++;
-						/*Serial.print(x);
+						/*Serial.print(angle);
+						Serial.print("    ");
+						Serial.print(x);
 						Serial.print("    ");
 						Serial.println(y);*/
 
