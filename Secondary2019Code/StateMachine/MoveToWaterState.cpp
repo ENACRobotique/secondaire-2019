@@ -23,8 +23,8 @@ MoveToWaterState::MoveToWaterState() {
 	usDistances.front_right = 0;
 	usDistances.rear_left = 0;
 	usDistances.rear_right = 0;
-	angles.angleA = 90 - 25;
-	angles.angleB = 90 + 25;
+	angles.angleA = 90 - 12;
+	angles.angleB = 90 + 12;
 }
 
 MoveToWaterState::~MoveToWaterState() {

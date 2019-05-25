@@ -8,6 +8,7 @@
 #include "TiretteState.h"
 #include "TurnToButtonState.h"
 #include "MoveToWaterState.h"
+#include "PremiereRecolte.h"
 #include "Arduino.h"
 #include "../params.h"
 #include "FSMSupervisor.h"
@@ -19,12 +20,15 @@
 TiretteState tiretteState = TiretteState();
 Servo arm = Servo();
 
+Servo mandibuleGauche = Servo();
+Servo mandibuleDroite = Servo();
+
 
 unsigned long time_us = 0;
 TiretteState::TiretteState() {
 	time_start = 0;
 	flags = E_ULTRASOUND;
-	COLOR_BEGIN =1;
+	COLOR_BEGIN = 1;
 }
 
 TiretteState::~TiretteState() {
@@ -35,9 +39,7 @@ void TiretteState::enter() {
 	Serial.println("Entrer dans tiretteState");
 	time_start = millis();
 	Serial.println("Etat tirette");
-	Dynamixel.begin(1000000, DYNAMIXEL_CONTROL);
-	arm.attach(SERVO3);
-	arm.write(160);
+
 
 	pinMode(TIRETTE,INPUT_PULLUP);
 	pinMode(COLOR,INPUT_PULLUP);
@@ -50,48 +52,26 @@ void TiretteState::enter() {
 }
 
 void TiretteState::leave() {
-	if(digitalRead(COLOR) == GREEN){
-		Odometry::set_pos(100, 300, 0);
-		COLOR_BEGIN = GREEN;
+	if(digitalRead(COLOR) == PURPLE){
+		Odometry::set_pos(150, 650, 90);
+		COLOR_BEGIN = PURPLE;
 	}
 	else{
 		Odometry::set_pos(100, 300, 0);
-		COLOR_BEGIN = ORANGE;
+		COLOR_BEGIN = YELLOW;
 	}
+	Odometry::set_pos(150, 650, 90);
+	COLOR_BEGIN = PURPLE;
 }
 
 void TiretteState::doIt() {
 	time_start = millis();
-//	USDistances distances =usManager.getRanges();
-//	Serial.print("front left:");
-//	Serial.print(distances.front_left);
-//	Serial.print("\t");
-//	Serial.print("front right:");
-//	Serial.print(distances.front_right);
-//	Serial.print("\t");
-//	Serial.print("rear left:");
-//	Serial.print(distances.rear_left);
-//	Serial.print("\t");
-//	Serial.print("rear right:");
-//	Serial.println(distances.rear_right);
 	if (!digitalRead(TIRETTE)) {
-		/*digitalWrite(13, HIGH);   // turn the LED on (HIGH is the voltage level)
-		delay(1000);               // wait for a second
-		digitalWrite(13, LOW);    // turn the LED off by making the voltage LOW
-		delay(1000);*/
 		Serial.println("On change d'etat : gooooo!!");
 		time_start = millis();
-		fsmSupervisor.setNextState(&moveToWaterState);
+		fsmSupervisor.setNextState(&premiereRecolte);
 	}
-	else{ // Pour le test sans tirette
-		fsmSupervisor.setNextState(&moveToWaterState);
-	}
-//	if(digitalRead(COLOR) == GREEN){
-//		Serial.println("GREEN");
-//	}
-//	else{
-//		Serial.println("ORANGE");
-//	}
+
 }
 
 void TiretteState::reEnter(unsigned long interruptTime){

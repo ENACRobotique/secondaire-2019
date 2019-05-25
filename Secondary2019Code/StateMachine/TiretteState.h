@@ -11,6 +11,8 @@
 #include "AbstractState.h"
 #include "Servo.h"
 
+
+
 class TiretteState : public AbstractState {
 public:
 	TiretteState();
@@ -36,5 +38,7 @@ private:
 extern TiretteState tiretteState;
 
 extern Servo arm;
+extern Servo mandibuleGauche;
+extern Servo mandibuleDroite;
 
 #endif /* STATEMACHINE_TIRETTESTATE_H_ */

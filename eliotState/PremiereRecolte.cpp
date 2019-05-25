@@ -22,7 +22,7 @@ float traj_recolte1_purple[][2] = { {150,1200},
 								{500,300}
 };
 
-float turn_recolte1_purple[] = {0,-90}
+float turn_recolte1_purple[] = {0,-90};
 
 /*float traj_recolte1_yellow[][2] = { {150,1200},
 								{500,1200},
