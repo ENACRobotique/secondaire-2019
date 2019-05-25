@@ -53,15 +53,11 @@ void FSMSupervisor::update() {
 		lidarManager.update();
 	}
 
-	if(/*currentState->getFlags() & E_ULTRASOUND &*/ (millis() - deb > 50)){
+	/*if(currentState->getFlags() & E_ULTRASOUND & (millis() - deb > 75)){
 		deb = millis();
 
 		unsigned int angleA = currentState->getAngles().angleA;
 		unsigned int angleB = currentState->getAngles().angleB;
-		Serial.print(angleA);
-		Serial.print("   ");
-		Serial.println(angleB);
-		Serial.println(lidarManager.obstacleDetected(angleA, angleB));
 		if(lidarManager.obstacleDetected(angleA, angleB)){
 			time_obstacle_left = 0;
 			Serial.println("Obstacle detected");
@@ -87,7 +83,7 @@ void FSMSupervisor::update() {
 				}
 			}
 		}
-	}
+	}*/
 }
 
 void FSMSupervisor::init(AbstractState* state) {

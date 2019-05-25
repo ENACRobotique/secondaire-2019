@@ -82,8 +82,8 @@ namespace MotorControl {
 		prev_omega_error = error_omega;
 		float cmd_omega = Kp_omega * error_omega + Ki_omega * error_integrale_omega + Kd_omega * delta_omega;
 
-		int cmd_mot1 = clamp(-255, 255, cmd_speed + cmd_omega);
-		int cmd_mot2 = -clamp(-255, 255, cmd_speed - cmd_omega);
+		int cmd_mot1 = clamp(-255, 255, cmd_speed - cmd_omega);
+		int cmd_mot2 = -clamp(-255, 255, cmd_speed + cmd_omega);
 
 		analogWrite(MOT1_PWM, abs(cmd_mot1));
 		digitalWrite(MOT1_DIR, direction_sign(cmd_mot1));

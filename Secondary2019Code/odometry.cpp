@@ -56,6 +56,7 @@ namespace Odometry{
 			}
 		}
 
+
 	float get_pos_x(){
 		return pos_x;
 	}
@@ -65,7 +66,16 @@ namespace Odometry{
 	}
 
 	float get_pos_theta(){
-		return pos_theta;
+		return normalizeAngle(pos_theta);
+	}
+
+
+	float normalizeAngle(float angle)
+	{
+	    float newAngle = angle;
+	    while (newAngle <= -PI) newAngle += TWO_PI;
+	    while (newAngle > PI) newAngle -= TWO_PI;
+	    return newAngle;
 	}
 
 	float get_speed(){
@@ -90,12 +100,23 @@ namespace Odometry{
 		sei();
 
 		float length = ((float)(incr1+incr2)/2.0)*INCR_TO_MM;
-		float angle = ((float)(incr1-incr2)*INCR_TO_MM)/WHEELBASE;
+		float angle = ((float)(incr2-incr1)*INCR_TO_MM)/WHEELBASE;
 
 		//TODO : vérifier formule
+		/*Serial.print(" update() >> postheta=");
+		Serial.print(pos_theta);
+		Serial.print(" angle=");
+		Serial.print(angle);*/
 		pos_x = pos_x + length*cos(pos_theta + angle/2.0);
 		pos_y = pos_y + length*sin(pos_theta + angle/2.0);
-		pos_theta = pos_theta + angle;
+		pos_theta = pos_theta + angle;/*
+		Serial.print(" pos_x=");
+		Serial.print(pos_x);
+		Serial.print(" pos_y=");
+		Serial.print(pos_y);
+		Serial.print(" new pos_theta=");
+		Serial.print(pos_theta);
+		Serial.println(".");*/
 		speed = length / CONTROL_PERIOD;
 		omega = angle / CONTROL_PERIOD;
 

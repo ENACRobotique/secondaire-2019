@@ -40,8 +40,14 @@ void Navigator::move_to(float x, float y){
 
 void Navigator::turn_to(float theta){ // En degrés
 	theta_target = center_radian(PI*theta/180);
+
+	Serial.print("Angle: ");
+	Serial.println(Odometry::get_pos_theta());
 	Serial.print("moving_to : ");
-	Serial.println(theta_target);
+	Serial.print(theta_target);
+	Serial.print(" ( <  ");
+	Serial.println(theta);
+
 	move_type = TURN;
 	move_state = INITIAL_TURN;
 	trajectory_done = false;
@@ -265,10 +271,6 @@ float Navigator::center_axes(float angle)
 
 float Navigator::center_radian(float angle)
 {
-	/*Serial.print("center radian:");
-		Serial.print("\t");
-		Serial.print(angle);
-		Serial.print("\t");*/
 	if (abs(angle) > PI){
 		if(angle<0){
 			while(abs(angle)>PI){

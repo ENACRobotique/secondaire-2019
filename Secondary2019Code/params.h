@@ -21,6 +21,7 @@ const int MOT1_DIR = 6;
 const int MOT2_PWM = 29;
 const int MOT2_DIR = 28;
 
+
 const int SERVO1 = 39;
 const int SERVO2 = 15;
 const int SERVO3 = 37;
@@ -67,13 +68,15 @@ const unsigned long THROW_DURATION = 20000;
 const unsigned long SERVO_MOVEMENT_DURATION = 1000;
 const unsigned long DETECTION_STOP_TIME = 1500;
 
-const int MANDIBULE_DROITE_BAS = 130;
-const int MANDIBULE_GAUCHE_BAS = 0;
+const int MANDIBULE_DROITE_BAS = 135;
+const int MANDIBULE_GAUCHE_BAS = 150;
 const int MANDIBULE_DROITE_HAUT = 0;
-const int MANDIBULE_GAUCHE_HAUT = 140;
+const int MANDIBULE_GAUCHE_HAUT = 25;
 
 const int GREEN = 1;
 const int ORANGE = !GREEN;
+const int PURPLE = 1;
+const int YELLOW = !PURPLE;
 
 const int NB_US = 4;
 #endif /* PARAMS_H_ */
