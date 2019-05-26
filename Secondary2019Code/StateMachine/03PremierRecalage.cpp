@@ -9,7 +9,8 @@
 #include "02PremierRangement.h"
 #include "03PremierRecalage.h"
 #include "00TiretteState.h"
-#include "04RecolteChaos.h"
+//#include "04RecolteChaos.h"
+#include "DeadState.h"
 #include "../Navigator.h"
 #include "Arduino.h"
 #include "../params.h"
@@ -78,7 +79,8 @@ void PremierRecalage::doIt() {
 			else{
 				Odometry::set_pos(25,780,0); //TODO regarder les mesure du cote jaune
 			}
-			fsmSupervisor.setNextState(&recolteChaos);
+			//fsmSupervisor.setNextState(&recolteChaos);
+			fsmSupervisor.setNextState(&deadState);
 		}
 		else{
 			if(tiretteState.get_color() == PURPLE){

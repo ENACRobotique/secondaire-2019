@@ -40,8 +40,8 @@ PremierRangement::PremierRangement() {
 	flags = E_ULTRASOUND;
 	usDistances.front_left = 0;
 	usDistances.front_right = 0;
-	usDistances.rear_left = 0;
-	usDistances.rear_right = 0;
+	usDistances.rear_left = US_RANGE;
+	usDistances.rear_right = US_RANGE;
 	angles.angleA = 80;
 	angles.angleB = 100;
 	trajectory_index = 0;
@@ -87,6 +87,11 @@ void PremierRangement::doIt() {
 		if(tiretteState.get_color() == PURPLE){
 			trajectory_index += 1;
 			if(traj_rangement1_purple[trajectory_index][0]==DISPLACEMENT)
+				if(trajectory_index == 4){
+					usDistances.rear_left = 0;
+					usDistances.rear_right = 0;
+				}
+				else
 				navigator.move_to(traj_rangement1_purple[trajectory_index][1],traj_rangement1_purple[trajectory_index][2]);
 			else if(traj_rangement1_purple[trajectory_index][0]==TURN)
 				navigator.turn_to(traj_rangement1_purple[trajectory_index][1] );
