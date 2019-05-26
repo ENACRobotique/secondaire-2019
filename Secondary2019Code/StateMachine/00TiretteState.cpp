@@ -10,10 +10,12 @@
 #include "Arduino.h"
 #include "../params.h"
 #include "FSMSupervisor.h"
-#include "DynamixelSerial4.h"
+#include "Servo.h"
 #include "../odometry.h"
 //#include "../libraries/i2c_t3/i2c_t3.h"
 #include "../lib/USManager.h"
+#include "03PremierRecalage.h"
+
 
 TiretteState tiretteState = TiretteState();
 Servo arm = Servo();

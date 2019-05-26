@@ -45,16 +45,16 @@ void setup()
 {
 	pinMode(PIN_LED, OUTPUT);
 	pinMode(MOT_LIDAR, OUTPUT);
-	analogWrite(MOT_LIDAR, 70);
+	analogWrite(MOT_LIDAR, 0); //arrêt du lidar
 
 	Serial.begin(115200);
 	Serial1.begin(115200);
-	while(!Serial){}
+	//while(!Serial){}
 	Serial.println("INIT Serial");
 
 	Odometry::init();
 	MotorControl::init();
-	//fsmSupervisor.init(&tiretteState);
+	fsmSupervisor.init(&tiretteState);
 	controlTime.reset();
 	navigatorTime.reset();
 	deb = millis();
@@ -76,7 +76,7 @@ int i = 0;
 // The loop function is called in an endless loop
 void loop()
 {
-	if (Serial1.available()){
+	/*if (Serial1.available()){
 		lidarManager.update();
 		if (lidarManager.lidar.is_packet_available()){
 		if(millis() - deb > 200){
@@ -88,10 +88,10 @@ void loop()
 
 		}
 	}
-	}
+	}*/
 
 
-	//fsmSupervisor.update();
+	fsmSupervisor.update();
 
 	if(controlTime.check()) {
 		Odometry::update();
