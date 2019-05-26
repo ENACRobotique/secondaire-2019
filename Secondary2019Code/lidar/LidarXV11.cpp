@@ -24,7 +24,7 @@ LidarXV11::~LidarXV11() {
 
 void LidarXV11::update(uint8_t byte) {
 	uint16_t checksum_rx;
-	Serial.println(state);
+	//Serial.println(state);
 	switch (state) {
 	case WAIT_START:
 		if (byte == 0xFA){

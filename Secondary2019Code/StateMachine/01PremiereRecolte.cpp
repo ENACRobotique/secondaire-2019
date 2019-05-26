@@ -57,13 +57,13 @@ void PremiereRecolte::enter() {
 
 	if(tiretteState.get_color() == PURPLE){
 		navigator.move_to(traj_recolte1_purple[0][1],traj_recolte1_purple[0][2]);
-		Serial.print(trajectory_index);
+		/*Serial.print(trajectory_index);
 		Serial.print("    ");
 		Serial.print(Odometry::get_pos_x());
 		Serial.print("    ");
 		Serial.print(Odometry::get_pos_y());
 		Serial.print("    ");
-		Serial.println(Odometry::get_pos_theta());
+		Serial.println(Odometry::get_pos_theta());*/
 	}
 	else{
 		navigator.move_to(traj_recolte1_yellow[0][0],traj_recolte1_yellow[0][1]);

@@ -49,12 +49,12 @@ void setup()
 
 	Serial.begin(115200);
 	Serial1.begin(115200);
-	//while(!Serial){}
+	while(!Serial){}
 	Serial.println("INIT Serial");
 
 	Odometry::init();
 	MotorControl::init();
-	fsmSupervisor.init(&tiretteState);
+	//fsmSupervisor.init(&tiretteState);
 	controlTime.reset();
 	navigatorTime.reset();
 	deb = millis();
@@ -79,18 +79,19 @@ void loop()
 	if (Serial1.available()){
 		lidarManager.update();
 		if (lidarManager.lidar.is_packet_available()){
-		//if(millis() - deb > 200){
+		if(millis() - deb > 200){
 			deb = millis();
-			//Odometry::set_pos(1500, 1300, 90);
-			//bool obs_detected = lidarManager.obstacleDetected(170, 190);
+			Odometry::set_pos(1500, 1300, 90);
+			bool obs_detected = lidarManager.obstacleDetected(170, 190);
 			//Serial.println(obs_detected);
-			//Serial.println(lidarManager.lidar.get_distance(180));
+			Serial.println(lidarManager.lidar.get_distance(180));
 
 		}
 	}
+	}
 
 
-	fsmSupervisor.update();
+	//fsmSupervisor.update();
 
 	if(controlTime.check()) {
 		Odometry::update();
