@@ -53,7 +53,7 @@ void FSMSupervisor::update() {
 		lidarManager.update();
 	}
 
-	if(/*currentState->getFlags() & E_ULTRASOUND & */(millis() - deb > 75)){
+	/*if(currentState->getFlags() & E_ULTRASOUND & (millis() - deb > 75)){
 		deb = millis();
 
 		unsigned int angleA = currentState->getAngles().angleA;
@@ -84,7 +84,34 @@ void FSMSupervisor::update() {
 				}
 			}
 		}
-	}
+	}*/
+	if(currentState->getFlags() & E_ULTRASOUND){
+		usManager.update();
+		if(usManager.obstacleDetected()){
+			time_obstacle_left = 0;
+			if(currentState != &pauseState){			// on va dans l'état pause
+				currentState->forceLeave();
+				previousState = currentState;
+				currentState = &pauseState;
+				pauseState.enter();
+			}
+
+		}
+		else {
+			if(currentState == &pauseState && previousState != NULL){		// on revient dans l'état précédent !
+				if(time_obstacle_left == 0){
+					time_obstacle_left = millis();
+				}
+				if(millis() - time_obstacle_left > DETECTION_STOP_TIME){ //Permet de ne pas repartir directement quand on ne détecte plus d'adversaires
+					pauseState.leave();
+					previousState->reEnter(pauseState.getPauseTime());
+					currentState = previousState;
+					previousState = &pauseState;
+					time_obstacle_left = 0; //May be useless (just like the primary)
+				}
+			}
+		}
+}
 }
 
 void FSMSupervisor::init(AbstractState* state) {
