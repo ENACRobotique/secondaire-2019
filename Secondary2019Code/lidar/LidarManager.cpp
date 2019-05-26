@@ -101,20 +101,25 @@ bool LidarManager::obstacleDetected(int lidarAngleA, int lidarAngleB){
 	    Serial.print("    ");
 		Serial.println(LidarManager::is_ignored(angle));*/
 
-		if(lidar.is_valid(angle) and lidar.get_distance(angle) < DIST_MIN){
+		if(/*lidar.is_valid(angle) and*/ lidar.get_distance(angle) < DIST_MIN){
 
-
-
-			if(!LidarManager::is_ignored(angle)){
+			/*if(!LidarManager::is_ignored(angle)){
 						i++;
-						/*Serial.print(angle);
+						Serial.print(angle);
 						Serial.print("    ");
 						Serial.print(x);
 						Serial.print("    ");
-						Serial.println(y);*/
+						Serial.println(y);
 
-			}
+			}*/
+			//i++;
+
 		}
+		/*Serial.print(angle);
+		Serial.print(" : ");
+		Serial.println(lidar.get_distance(angle));*/
+		//Serial.print(" : ");
+		//Serial.println(lidar.is_valid(angle));
 
 	}
 	if(i >= NB_OBSTACLES){

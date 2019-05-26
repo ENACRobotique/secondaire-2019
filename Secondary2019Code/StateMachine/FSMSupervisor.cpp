@@ -49,11 +49,11 @@ void FSMSupervisor::update() {
 
 	currentState->doIt();
 
-	if(Serial1.available()){
+	/*if(Serial1.available()){
 		lidarManager.update();
 	}
 
-	/*if(currentState->getFlags() & E_ULTRASOUND & (millis() - deb > 75)){
+	if((millis() - deb > 75)){
 		deb = millis();
 
 		unsigned int angleA = currentState->getAngles().angleA;
@@ -111,7 +111,7 @@ void FSMSupervisor::update() {
 				}
 			}
 		}
-}
+	}
 }
 
 void FSMSupervisor::init(AbstractState* state) {

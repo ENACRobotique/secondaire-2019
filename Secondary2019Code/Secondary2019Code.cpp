@@ -45,7 +45,7 @@ void setup()
 {
 	pinMode(PIN_LED, OUTPUT);
 	pinMode(MOT_LIDAR, OUTPUT);
-	analogWrite(MOT_LIDAR, 0); //arrêt du lidar
+	analogWrite(MOT_LIDAR, 70);
 
 	Serial.begin(115200);
 	Serial1.begin(115200);

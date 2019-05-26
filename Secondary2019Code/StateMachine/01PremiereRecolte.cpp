@@ -89,7 +89,8 @@ void PremiereRecolte::doIt() {
 				navigator.move_to(traj_recolte1_purple[trajectory_index][1],traj_recolte1_purple[trajectory_index][2]);
 			else if(traj_recolte1_purple[trajectory_index][0]==TURN)
 				navigator.turn_to(traj_recolte1_purple[trajectory_index][1] );
-				if(trajectory_index == 3){
+				if(trajectory_index == 3
+						){
 					Odometry::set_pos(150, 1300, 0);
 				}
 		}
