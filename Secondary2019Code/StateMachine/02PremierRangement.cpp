@@ -21,8 +21,8 @@
 PremierRangement premierRangement = PremierRangement();
 
 float traj_rangement1_purple[][3] = { {DISPLACEMENT,500,570},
-									{TURN,-140,0},
-									{TURN,-190,0},
+									{TURN,-141,0},
+									{TURN,-192,0},
 								{DISPLACEMENT,205,550},
 };
 
