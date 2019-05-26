@@ -40,8 +40,8 @@ PremiereRecolte::PremiereRecolte() {
 	time_start = 0;
 	trajectory_index = 0;
 	flags = E_ULTRASOUND;
-	usDistances.front_left = 0;
-	usDistances.front_right = 0;
+	usDistances.front_left = US_RANGE;  //changer selon côté de la table
+	usDistances.front_right = US_RANGE;
 	usDistances.rear_left = 0;
 	usDistances.rear_right = 0;
 	angles.angleA = 80;

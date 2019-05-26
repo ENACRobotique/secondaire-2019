@@ -22,6 +22,9 @@ const int MOT2_PWM = 29;
 const int MOT2_DIR = 28;
 
 
+const int US_RANGE = 35;
+const int US_RANGE_DIMINUSHED = 25;
+
 const int SERVO1 = 39;
 const int SERVO2 = 15;
 const int SERVO3 = 37;
