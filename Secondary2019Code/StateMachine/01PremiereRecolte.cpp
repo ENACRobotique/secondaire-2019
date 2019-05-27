@@ -33,7 +33,7 @@ float traj_recolte1_yellow[][3] = { {DISPLACEMENT,2850,1300},
 									{TURN,178,0},
 									{DISPLACEMENT,2500,1300},
 									{TURN,-140,0},
-									{TURN,-90,0},
+									{TURN,-94,0},
 									{DISPLACEMENT,2500,350}
 };
 
@@ -92,6 +92,9 @@ void PremiereRecolte::doIt() {
 				navigator.move_to(traj_recolte1_purple[trajectory_index][1],traj_recolte1_purple[trajectory_index][2]);
 			else if(traj_recolte1_purple[trajectory_index][0]==TURN)
 				navigator.turn_to(traj_recolte1_purple[trajectory_index][1] );
+			if(trajectory_index == 3){
+				Odometry::set_pos(150,1300,0);
+			}
 		}
 		else{
 			trajectory_index += 1;

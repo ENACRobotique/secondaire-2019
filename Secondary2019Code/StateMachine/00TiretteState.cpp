@@ -28,7 +28,7 @@ unsigned long time_us = 0;
 TiretteState::TiretteState() {
 	time_start = 0;
 	flags = E_ULTRASOUND;
-	COLOR_BEGIN = 1;
+	COLOR_BEGIN = PURPLE;
 	angles.angleA = 80;
 	angles.angleB = 100;
 }
@@ -62,10 +62,10 @@ void TiretteState::leave() {
 		Odometry::set_pos(2850, 650, 90);
 		COLOR_BEGIN = YELLOW;
 	}
-	/*Odometry::set_pos(150, 650, 90);
-	COLOR_BEGIN = PURPLE;*/
-	Odometry::set_pos(2850, 650, 90);
-	COLOR_BEGIN = YELLOW;
+	Odometry::set_pos(150, 650, 90);
+	COLOR_BEGIN = PURPLE;
+	//Odometry::set_pos(2850, 650, 90);
+	//COLOR_BEGIN = YELLOW;
 }
 
 void TiretteState::doIt() {
