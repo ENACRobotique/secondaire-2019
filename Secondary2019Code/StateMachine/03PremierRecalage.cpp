@@ -83,7 +83,7 @@ void PremierRecalage::doIt() {
 				Odometry::set_pos(25,780,0);
 			}
 			else{
-				Odometry::set_pos(2975,780,0);
+				Odometry::set_pos(2975,780,180);
 			}
 			fsmSupervisor.setNextState(&recolteChaos);
 			//fsmSupervisor.setNextState(&deadState);

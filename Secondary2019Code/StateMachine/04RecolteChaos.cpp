@@ -15,6 +15,7 @@
 #include "../params.h"
 #include "FSMSupervisor.h"
 #include "../lib/USManager.h"
+#include "DeadState.h"
 
 RecolteChaos recolteChaos = RecolteChaos();
 
@@ -26,9 +27,12 @@ float traj_recolte2_purple[][3] = { {DISPLACEMENT,1000,700},
 
 };
 
-float traj_recolte2_yellow[][2] = { {150,1200},
-								{500,1200},
-								{500,300}
+
+float traj_recolte2_yellow[][3] = { {DISPLACEMENT,2000,700},
+									{TURN,135,0},
+									{TURN,90,0},
+									{DISPLACEMENT,2000,1200},
+
 };
 
 
@@ -71,6 +75,8 @@ void RecolteChaos::doIt() {
 			mandibuleDroite.write(MANDIBULE_GAUCHE_BAS);
 			delay(250);
 			fsmSupervisor.setNextState(&rangementChaos);
+			//fsmSupervisor.setNextState(&deadState);
+
 		}
 		else{
 			if(tiretteState.get_color() == PURPLE){
@@ -84,9 +90,13 @@ void RecolteChaos::doIt() {
 
 			}
 			else{
-				//navigator.turn_to(turn_recalage1_yellow[trajectory_index]);
 				trajectory_index += 1;
-				navigator.move_to(traj_recolte2_yellow[trajectory_index][0],traj_recolte2_yellow[trajectory_index][1]);
+				if(traj_recolte2_yellow[trajectory_index][0]==DISPLACEMENT){
+					navigator.move_to(traj_recolte2_yellow[trajectory_index][1],traj_recolte2_yellow[trajectory_index][2]);
+				}
+				else if(traj_recolte2_yellow[trajectory_index][0]==TURN){
+					navigator.turn_to(traj_recolte2_yellow[trajectory_index][1] );
+				}
 			}
 		}
 	}

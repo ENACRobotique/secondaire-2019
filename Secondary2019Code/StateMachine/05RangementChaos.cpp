@@ -16,6 +16,7 @@
 #include "FSMSupervisor.h"
 #include "../lib/USManager.h"
 #include "../odometry.h"
+#include "DeadState.h"
 
 RangementChaos rangementChaos = RangementChaos();
 
@@ -27,9 +28,12 @@ float traj_rangement2_purple[][3] = { {DISPLACEMENT,1000,400},
 
 };
 
-float traj_rangement2_yellow[][2] = { {150,1200},
-								{500,1200},
-								{500,300}
+
+float traj_rangement2_yellow[][3] = { {DISPLACEMENT,2000,400},
+									{TURN,45,0},
+									{TURN,5,0},
+									{DISPLACEMENT,2750,400},
+
 };
 
 RangementChaos::RangementChaos() {
@@ -57,8 +61,7 @@ void RangementChaos::enter() {
 	}
 	else{
 		navigator.move_to(traj_rangement2_yellow[0][1],traj_rangement2_yellow[0][2]);
-		navigator.turn_to(-180); //TODO voir les bonnes valeurs pour le cotes jaunes
-		navigator.move_to(traj_rangement2_yellow[1][0],traj_rangement2_yellow[1][1]);
+
 	}
 
 }
@@ -72,7 +75,8 @@ void RangementChaos::doIt() {
 		if(trajectory_index == 3){
 			mandibuleGauche.write(MANDIBULE_GAUCHE_HAUT);
 			mandibuleDroite.write(MANDIBULE_DROITE_HAUT);
-			fsmSupervisor.setNextState(&deuxiemeRecalage);
+			fsmSupervisor.setNextState(&deadState);
+			//fsmSupervisor.setNextState(&deuxiemeRecalage);
 		}
 		else{
 			if(tiretteState.get_color() == PURPLE){
@@ -91,7 +95,16 @@ void RangementChaos::doIt() {
 			else{
 				//navigator.turn_to(turn_recalage1_yellow[trajectory_index]);
 				trajectory_index += 1;
-				navigator.move_to(traj_rangement2_yellow[trajectory_index][0],traj_rangement2_yellow[trajectory_index][1]);
+				//navigator.move_to(traj_rangement2_yellow[trajectory_index][0],traj_rangement2_yellow[trajectory_index][1]);
+				if(traj_rangement2_yellow[trajectory_index][0]==DISPLACEMENT){
+					navigator.move_to(traj_rangement2_yellow[trajectory_index][1],traj_rangement2_yellow[trajectory_index][2]);
+				}
+				else if(traj_rangement2_yellow[trajectory_index][0]==TURN){
+					navigator.turn_to(traj_rangement2_yellow[trajectory_index][1] );
+					if(trajectory_index == 2){
+						Odometry::set_pos(2000, 400, 0);
+					}
+				}
 			}
 		}
 	}
