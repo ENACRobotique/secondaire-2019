@@ -9,7 +9,7 @@
 #include "02PremierRangement.h"
 #include "03PremierRecalage.h"
 #include "00TiretteState.h"
-//#include "04RecolteChaos.h"
+#include "04RecolteChaos.h"
 #include "DeadState.h"
 #include "../Navigator.h"
 #include "Arduino.h"
@@ -31,12 +31,15 @@ float traj_recalage1_purple[][3] = { {DISPLACEMENT,650,550},
 };
 
 
-float traj_recalage1_yellow[][2] = { {150,1200},
-								{500,1200},
-								{500,300}
+float traj_recalage1_yellow[][3] = { {DISPLACEMENT,2350,550},
+									{TURN,45,0},
+									{TURN,90,0},
+									{DISPLACEMENT,2350,780},
+									{TURN,135,0},
+									{TURN,180,0},
+									{DISPLACEMENT,3015,780}
 };
 
-float turn_recalage1_purple[] = {90, 0};
 
 
 PremierRecalage::PremierRecalage() {
@@ -61,6 +64,9 @@ void PremierRecalage::enter() {
 	if(tiretteState.get_color() == PURPLE){
 		navigator.move_to(traj_recalage1_purple[trajectory_index][1],traj_recalage1_purple[trajectory_index][2]);
 	}
+	else{
+		navigator.move_to(traj_recalage1_yellow[trajectory_index][1],traj_recalage1_yellow[trajectory_index][2]);
+	}
 	//Serial.println("Etat premiere recalage");
 
 
@@ -77,10 +83,10 @@ void PremierRecalage::doIt() {
 				Odometry::set_pos(25,780,0);
 			}
 			else{
-				Odometry::set_pos(25,780,0); //TODO regarder les mesure du cote jaune
+				Odometry::set_pos(2975,780,0);
 			}
-			//fsmSupervisor.setNextState(&recolteChaos);
-			fsmSupervisor.setNextState(&deadState);
+			fsmSupervisor.setNextState(&recolteChaos);
+			//fsmSupervisor.setNextState(&deadState);
 		}
 		else{
 			if(tiretteState.get_color() == PURPLE){
@@ -89,12 +95,13 @@ void PremierRecalage::doIt() {
 					navigator.move_to(traj_recalage1_purple[trajectory_index][1],traj_recalage1_purple[trajectory_index][2]);
 				else if(traj_recalage1_purple[trajectory_index][0]==TURN)
 					navigator.turn_to(traj_recalage1_purple[trajectory_index][1] );
-
 			}
 			else{
-				//navigator.turn_to(turn_recalage1_yellow[trajectory_index]);
 				trajectory_index += 1;
-				navigator.move_to(traj_recalage1_yellow[trajectory_index][0],traj_recalage1_yellow[trajectory_index][1]);
+				if(traj_recalage1_yellow[trajectory_index][0]==DISPLACEMENT)
+					navigator.move_to(traj_recalage1_yellow[trajectory_index][1],traj_recalage1_yellow[trajectory_index][2]);
+				else if(traj_recalage1_yellow[trajectory_index][0]==TURN)
+					navigator.turn_to(traj_recalage1_yellow[trajectory_index][1] );
 			}
 		}
 	}

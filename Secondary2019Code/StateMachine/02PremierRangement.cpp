@@ -23,13 +23,14 @@ PremierRangement premierRangement = PremierRangement();
 float traj_rangement1_purple[][3] = { {DISPLACEMENT,500,570},
 									{TURN,-141,0},
 									{TURN,-192,0},
-								{DISPLACEMENT,205,550},
+									{DISPLACEMENT,205,550},
 };
 
 
-float traj_rangement1_yellow[][2] = { {150,1200},
-								{500,1200},
-								{500,300}
+float traj_rangement1_yellow[][3] = { {DISPLACEMENT,2500,570},
+									{TURN,-32,0},
+									{TURN,4,0},
+									{DISPLACEMENT,2795,550},
 };
 
 
@@ -59,12 +60,7 @@ void PremierRangement::enter() {
 		navigator.move_to(traj_rangement1_purple[0][1],traj_rangement1_purple[0][2]);
 	}
 	else{
-		navigator.move_to(traj_rangement1_yellow[0][0],traj_rangement1_yellow[0][1]);
-		navigator.turn_to(-135);
-		navigator.turn_to(-180); //TODO voir les bonnes valeurs pour le cotes jaunes
-		mandibuleGauche.write(MANDIBULE_GAUCHE_HAUT);
-		mandibuleDroite.write(MANDIBULE_DROITE_HAUT);
-		navigator.move_to(traj_rangement1_yellow[1][0],traj_rangement1_yellow[1][1]);
+		navigator.move_to(traj_rangement1_yellow[0][1],traj_rangement1_yellow[0][2]);
 	}
 }
 
@@ -82,24 +78,31 @@ void PremierRangement::doIt() {
 		if(trajectory_index == 2){
 			mandibuleGauche.write(MANDIBULE_GAUCHE_HAUT);
 			mandibuleDroite.write(MANDIBULE_DROITE_HAUT);
-			Odometry::set_pos(500, 550, 180);
+			if(tiretteState.get_color() == PURPLE){
+				Odometry::set_pos(500, 550, 180);
+			}
+			else{
+				Odometry::set_pos(2500, 550, 0);
+			}
 		}
 		if(tiretteState.get_color() == PURPLE){
 			trajectory_index += 1;
 			if(traj_rangement1_purple[trajectory_index][0]==DISPLACEMENT)
-				if(trajectory_index == 4){
+				/*if(trajectory_index == 4){
 					usDistances.rear_left = 0;
 					usDistances.rear_right = 0;
 				}
-				else
+				else*/
 				navigator.move_to(traj_rangement1_purple[trajectory_index][1],traj_rangement1_purple[trajectory_index][2]);
 			else if(traj_rangement1_purple[trajectory_index][0]==TURN)
 				navigator.turn_to(traj_rangement1_purple[trajectory_index][1] );
 		}
 		else{
-			navigator.turn_to(traj_rangement1_yellow[trajectory_index][1]);
 			trajectory_index += 1;
-			navigator.move_to(traj_rangement1_yellow[trajectory_index][0],traj_rangement1_yellow[trajectory_index][1]);
+			if(traj_rangement1_yellow[trajectory_index][0]==DISPLACEMENT)
+				navigator.move_to(traj_rangement1_yellow[trajectory_index][1],traj_rangement1_yellow[trajectory_index][2]);
+			else if(traj_rangement1_yellow[trajectory_index][0]==TURN)
+				navigator.turn_to(traj_rangement1_yellow[trajectory_index][1] );
 		}
 	}
 }

@@ -59,15 +59,19 @@ void TiretteState::leave() {
 		COLOR_BEGIN = PURPLE;
 	}
 	else{
-		Odometry::set_pos(100, 300, 0);
+		Odometry::set_pos(2850, 650, 90);
 		COLOR_BEGIN = YELLOW;
 	}
-	Odometry::set_pos(150, 650, 90);
-	COLOR_BEGIN = PURPLE;
+	/*Odometry::set_pos(150, 650, 90);
+	COLOR_BEGIN = PURPLE;*/
+	Odometry::set_pos(2850, 650, 90);
+	COLOR_BEGIN = YELLOW;
 }
 
 void TiretteState::doIt() {
 	time_start = millis();
+	Serial.println("On entre dans doIt!");
+
 	if (!digitalRead(TIRETTE)) {
 		Serial.println("On change d'etat : gooooo!!");
 		time_start = millis();

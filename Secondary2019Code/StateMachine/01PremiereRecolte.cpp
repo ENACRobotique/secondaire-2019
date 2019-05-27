@@ -19,21 +19,23 @@
 PremiereRecolte premiereRecolte = PremiereRecolte();
 
 float traj_recolte1_purple[][3] = { {DISPLACEMENT,150,1300},
-									{TURN,44,0},
-									{TURN,-2,0},
-								{DISPLACEMENT,500,1300},
-								{TURN,-45,0},
-								{TURN,-90,0},
-								{DISPLACEMENT,500,350}
+									{TURN,45,0},
+									{TURN,0,0},
+									{DISPLACEMENT,500,1300},
+									{TURN,-45,0},
+									{TURN,-90,0},
+									{DISPLACEMENT,500,350}
 };
 
 
-float traj_recolte1_yellow[][2] = { {150,1200},  // TODO
-								{500,1200},
-								{500,300}
+float traj_recolte1_yellow[][3] = { {DISPLACEMENT,2850,1300},
+									{TURN,135,0},
+									{TURN,178,0},
+									{DISPLACEMENT,2500,1300},
+									{TURN,-140,0},
+									{TURN,-90,0},
+									{DISPLACEMENT,2500,350}
 };
-
-float turn_recolte1_yellow[] = {0,-90};
 
 
 PremiereRecolte::PremiereRecolte() {
@@ -53,7 +55,7 @@ PremiereRecolte::~PremiereRecolte() {
 }
 
 void PremiereRecolte::enter() {
-
+	Serial.println("On entre dans l'état 1");
 
 	if(tiretteState.get_color() == PURPLE){
 		navigator.move_to(traj_recolte1_purple[0][1],traj_recolte1_purple[0][2]);
@@ -66,7 +68,7 @@ void PremiereRecolte::enter() {
 		Serial.println(Odometry::get_pos_theta());*/
 	}
 	else{
-		navigator.move_to(traj_recolte1_yellow[0][0],traj_recolte1_yellow[0][1]);
+		navigator.move_to(traj_recolte1_yellow[0][1],traj_recolte1_yellow[0][2]);
 	}
 
 }
@@ -83,21 +85,26 @@ void PremiereRecolte::doIt() {
 			fsmSupervisor.setNextState(&premierRangement);
 			return;
 		}
+
 		if(tiretteState.get_color() == PURPLE){
 			trajectory_index += 1;
 			if(traj_recolte1_purple[trajectory_index][0]==DISPLACEMENT)
 				navigator.move_to(traj_recolte1_purple[trajectory_index][1],traj_recolte1_purple[trajectory_index][2]);
 			else if(traj_recolte1_purple[trajectory_index][0]==TURN)
 				navigator.turn_to(traj_recolte1_purple[trajectory_index][1] );
-				if(trajectory_index == 3
-						){
-					Odometry::set_pos(150, 1300, 0);
-				}
 		}
 		else{
-			navigator.turn_to(turn_recolte1_yellow[trajectory_index]);
 			trajectory_index += 1;
-			navigator.move_to(traj_recolte1_yellow[trajectory_index][0],traj_recolte1_yellow[trajectory_index][1]);
+			if(traj_recolte1_yellow[trajectory_index][0]==DISPLACEMENT)
+				navigator.move_to(traj_recolte1_yellow[trajectory_index][1],traj_recolte1_yellow[trajectory_index][2]);
+			else if(traj_recolte1_yellow[trajectory_index][0]==TURN)
+				navigator.turn_to(traj_recolte1_yellow[trajectory_index][1] );
+			if(trajectory_index == 3){
+				Odometry::set_pos(2850,1300,180);
+			}
+			if(trajectory_index == 6){
+				Odometry::set_pos(2500,1300,-90);
+			}
 		}
 	}
 }
