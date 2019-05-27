@@ -85,7 +85,8 @@ void FSMSupervisor::update() {
 			}
 		}
 	}*/
-	if(currentState->getFlags() & E_ULTRASOUND){
+	//TODO On a besoin de ça pour les ultrasons et pour re rentrer
+	/*if(currentState->getFlags() & E_ULTRASOUND){
 		usManager.update();
 		if(usManager.obstacleDetected()){
 			time_obstacle_left = 0;
@@ -111,7 +112,7 @@ void FSMSupervisor::update() {
 				}
 			}
 		}
-	}
+	}*/
 }
 
 void FSMSupervisor::init(AbstractState* state) {
