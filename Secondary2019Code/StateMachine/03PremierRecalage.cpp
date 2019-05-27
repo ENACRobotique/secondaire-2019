@@ -5,11 +5,10 @@
  *      Author: robot
  */
 
-
 #include "02PremierRangement.h"
 #include "03PremierRecalage.h"
 #include "00TiretteState.h"
-//#include "04RecolteChaos.h"
+#include "04RecolteChaos.h"
 #include "DeadState.h"
 #include "../Navigator.h"
 #include "Arduino.h"
@@ -20,24 +19,14 @@
 
 PremierRecalage premierRecalage = PremierRecalage();
 
+float traj_recalage1_purple[][3] = { { DISPLACEMENT, 650, 550 },
+		{ TURN, 135, 0 }, { TURN, 90, 0 }, { DISPLACEMENT, 650, 780 }, { TURN,
+				45, 0 }, { TURN, 0, 0 }, { DISPLACEMENT, -15, 780 } };
 
-float traj_recalage1_purple[][3] = { {DISPLACEMENT,650,550},
-									{TURN,135,0},
-									{TURN,90,0},
-									{DISPLACEMENT,650,780},
-									{TURN,45,0},
-									{TURN,0,0},
-									{DISPLACEMENT,-15,780}
-};
+float traj_recalage1_yellow[][2] =
+		{ { 150, 1200 }, { 500, 1200 }, { 500, 300 } };
 
-
-float traj_recalage1_yellow[][2] = { {150,1200},
-								{500,1200},
-								{500,300}
-};
-
-float turn_recalage1_purple[] = {90, 0};
-
+float turn_recalage1_purple[] = { 90, 0 };
 
 PremierRecalage::PremierRecalage() {
 	trajectory_index = 0;
@@ -47,8 +36,10 @@ PremierRecalage::PremierRecalage() {
 	usDistances.front_right = 0;
 	usDistances.rear_left = 0;
 	usDistances.rear_right = 0;
-	angles.angleA = 80;
-	angles.angleB = 100;
+	//angles.angleA = lidar_ar1;
+	//angles.angleB = lidar_ar2;
+	angles.angleA = 0;
+	angles.angleB = 0;
 }
 
 PremierRecalage::~PremierRecalage() {
@@ -56,13 +47,13 @@ PremierRecalage::~PremierRecalage() {
 }
 
 void PremierRecalage::enter() {
-	Serial.println("Onj entre dans enter de premierRecalage");
-	//Odometry::set_pos(220, 550, -180);
-	if(tiretteState.get_color() == PURPLE){
-		navigator.move_to(traj_recalage1_purple[trajectory_index][1],traj_recalage1_purple[trajectory_index][2]);
+	has_reentered = 0;
+	Serial.println("On entre dans enter de premierRecalage");
+	//Odometry::set_pos(220, 550, 180);
+	if (tiretteState.get_color() == PURPLE) {
+		navigator.move_to(traj_recalage1_purple[trajectory_index][1], traj_recalage1_purple[trajectory_index][2]);
 	}
 	//Serial.println("Etat premiere recalage");
-
 
 }
 
@@ -71,53 +62,70 @@ void PremierRecalage::leave() {
 }
 
 void PremierRecalage::doIt() {
-	if(navigator.isTrajectoryFinished()){
-		if(trajectory_index == 6){
-			if(tiretteState.get_color() == PURPLE){
-				Odometry::set_pos(25,780,0);
-			}
-			else{
-				Odometry::set_pos(25,780,0); //TODO regarder les mesure du cote jaune
+	digitalWrite(13, HIGH);
+	if(navigator.isTrajectoryFinished() or has_reentered){
+		has_reentered = 0;
+		if (trajectory_index == 6) {
+			if (tiretteState.get_color() == PURPLE) {
+				Odometry::set_pos(25, 780, 0);
+			} else {
+				Odometry::set_pos(25, 780, 0); //TODO regarder les mesure du cote jaune
 			}
 			//fsmSupervisor.setNextState(&recolteChaos);
 			fsmSupervisor.setNextState(&deadState);
-		}
-		else{
-			if(tiretteState.get_color() == PURPLE){
+		} else {
+			if (tiretteState.get_color() == PURPLE) {
 				trajectory_index += 1;
-				if(traj_recalage1_purple[trajectory_index][0]==DISPLACEMENT)
-					navigator.move_to(traj_recalage1_purple[trajectory_index][1],traj_recalage1_purple[trajectory_index][2]);
-				else if(traj_recalage1_purple[trajectory_index][0]==TURN)
-					navigator.turn_to(traj_recalage1_purple[trajectory_index][1] );
+				if (traj_recalage1_purple[trajectory_index][0]
+						== DISPLACEMENT) {
+					if (trajectory_index == 3) {
+						angles.angleA = lidar_av1;
+						angles.angleB = lidar_av2;
+					}
+					if (trajectory_index == 6) {
+						angles.angleA = lidar_ar1;
+						angles.angleB = lidar_ar2;
+					}
+					navigator.move_to(
+							traj_recalage1_purple[trajectory_index][1],
+							traj_recalage1_purple[trajectory_index][2]);
 
-			}
-			else{
-				//navigator.turn_to(turn_recalage1_yellow[trajectory_index]);
-				trajectory_index += 1;
-				navigator.move_to(traj_recalage1_yellow[trajectory_index][0],traj_recalage1_yellow[trajectory_index][1]);
+				}
+
+			} else if (traj_recalage1_purple[trajectory_index][0] == TURN) {
+				angles.angleA = 0;
+				angles.angleB = 0;
+				navigator.turn_to(traj_recalage1_purple[trajectory_index][1]);
 			}
 		}
+	} /*else {
+		//navigator.turn_to(turn_recalage1_yellow[trajectory_index]);
+		trajectory_index += 1;
+		navigator.move_to(traj_recalage1_yellow[trajectory_index][0],
+				traj_recalage1_yellow[trajectory_index][1]);
+	}*/
+
+}
+
+void PremierRecalage::reEnter(unsigned long interruptTime) {
+	time_start += interruptTime;
+
+	if (trajectory_index == 0) {
+		if (tiretteState.get_color() == PURPLE) {
+			navigator.move_to(traj_recalage1_purple[trajectory_index][1], traj_recalage1_purple[trajectory_index][2]);
+		} else {
+			navigator.move_to(traj_recalage1_yellow[trajectory_index][1],
+					traj_recalage1_yellow[trajectory_index][2]);
+		}
+	}
+
+	else if (trajectory_index >= 1) {
+		trajectory_index--;
+		has_reentered = 1;
 	}
 }
 
-void PremierRecalage::reEnter(unsigned long interruptTime){
-	time_start+=interruptTime;
-	/*if(digitalRead(COLOR) == GREEN){
-		navigator.move_to(POS_X_WATER,POS_Y_WATER_GREEN);
-	}
-	else{
-		navigator.move_to(POS_X_WATER,POS_Y_WATER_ORANGE);
-	}*/
-	Serial.println("reenter");
-	/*if(digitalRead(COLOR) == GREEN){
-		navigator.move_to(1500,-10000);
-	}
-	else{
-		navigator.move_to(1500,-10000);
-	}*/
-}
-
-void PremierRecalage::forceLeave(){
+void PremierRecalage::forceLeave() {
 
 }
 

@@ -49,6 +49,7 @@ public:
 	void setFlags(unsigned long flags) {
 		this->flags = flags;
 	}
+	int has_reentered;
 
 protected:
 	unsigned long flags;

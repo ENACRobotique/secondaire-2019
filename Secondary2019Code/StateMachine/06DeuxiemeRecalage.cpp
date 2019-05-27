@@ -17,6 +17,7 @@
 #include "../odometry.h"
 #include "FSMSupervisor.h"
 #include "../lib/USManager.h"
+#include "DeadState.h"
 
 DeuxiemeRecalage deuxiemeRecalage = DeuxiemeRecalage();
 
@@ -54,7 +55,7 @@ DeuxiemeRecalage::~DeuxiemeRecalage() {
 }
 
 void DeuxiemeRecalage::enter() {
-
+	has_reentered = 0;
 	//Serial.println("Etat premiere recalage");
 
 	if(tiretteState.get_color() == PURPLE){
@@ -70,7 +71,8 @@ void DeuxiemeRecalage::leave() {
 }
 
 void DeuxiemeRecalage::doIt() {
-	if(navigator.isTrajectoryFinished()){
+	if(navigator.isTrajectoryFinished() or has_reentered){
+		has_reentered = 0;
 		if(trajectory_index == 3){
 			if(tiretteState.get_color() == PURPLE){
 				Odometry::set_pos(600,1378,90);
@@ -78,7 +80,7 @@ void DeuxiemeRecalage::doIt() {
 			else{
 				Odometry::set_pos(25,780,0); //TODO regarder les mesure du cote jaune
 			}
-			//fsmSupervisor.setNextState(&atomeMontee);
+			fsmSupervisor.setNextState(&deadState);
 		}
 		else{
 			if(tiretteState.get_color() == PURPLE){
@@ -102,13 +104,19 @@ void DeuxiemeRecalage::doIt() {
 
 void DeuxiemeRecalage::reEnter(unsigned long interruptTime){
 	time_start+=interruptTime;
-	/*if(digitalRead(COLOR) == GREEN){
-		navigator.move_to(POS_X_WATER,POS_Y_WATER_GREEN);
+	if(trajectory_index == 0){
+		if(tiretteState.get_color() == PURPLE){
+				navigator.move_to(traj_recalage2_purple[trajectory_index][1],traj_recalage2_purple[trajectory_index][2]);
+		}
+		else{
+			navigator.move_to(traj_recalage2_yellow[trajectory_index][1],traj_recalage2_yellow[trajectory_index][2]);
+		}
 	}
-	else{
-		navigator.move_to(POS_X_WATER,POS_Y_WATER_ORANGE);
-	}*/
-	Serial.println("reenter");
+
+	else if(trajectory_index >= 1){
+		trajectory_index--;
+		has_reentered = 1;
+	}
 
 }
 

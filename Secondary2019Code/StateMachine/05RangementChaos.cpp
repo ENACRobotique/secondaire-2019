@@ -40,8 +40,8 @@ RangementChaos::RangementChaos() {
 	usDistances.front_right = 0;
 	usDistances.rear_left = 0;
 	usDistances.rear_right = 0;
-	angles.angleA = 80;
-	angles.angleB = 100;
+	angles.angleA = lidar_ar1;
+	angles.angleB = lidar_ar2;
 }
 
 RangementChaos::~RangementChaos() {
@@ -49,7 +49,7 @@ RangementChaos::~RangementChaos() {
 }
 
 void RangementChaos::enter() {
-
+	has_reentered = 0;
 	//Serial.println("Etat premiere recolte");
 
 	if(tiretteState.get_color() == PURPLE){
@@ -68,7 +68,8 @@ void RangementChaos::leave() {
 }
 
 void RangementChaos::doIt() {
-	if(navigator.isTrajectoryFinished()){
+	if(navigator.isTrajectoryFinished() or has_reentered){
+		has_reentered = 0;
 		if(trajectory_index == 3){
 			mandibuleGauche.write(MANDIBULE_GAUCHE_HAUT);
 			mandibuleDroite.write(MANDIBULE_DROITE_HAUT);
@@ -78,9 +79,15 @@ void RangementChaos::doIt() {
 			if(tiretteState.get_color() == PURPLE){
 				trajectory_index += 1;
 				if(traj_rangement2_purple[trajectory_index][0]==DISPLACEMENT){
+					if(trajectory_index == 3){
+						angles.angleA = lidar_av1;
+						angles.angleB = lidar_av2;
+					}
 					navigator.move_to(traj_rangement2_purple[trajectory_index][1],traj_rangement2_purple[trajectory_index][2]);
 				}
 				else if(traj_rangement2_purple[trajectory_index][0]==TURN){
+					angles.angleA = 0;
+					angles.angleB = 0;
 					navigator.turn_to(traj_rangement2_purple[trajectory_index][1] );
 					if(trajectory_index == 2){
 						Odometry::set_pos(1000, 400, 180);
@@ -99,19 +106,19 @@ void RangementChaos::doIt() {
 
 void RangementChaos::reEnter(unsigned long interruptTime){
 	time_start+=interruptTime;
-	/*if(digitalRead(COLOR) == GREEN){
-		navigator.move_to(POS_X_WATER,POS_Y_WATER_GREEN);
+	if(trajectory_index == 0){
+		if(tiretteState.get_color() == PURPLE){
+				navigator.move_to(traj_rangement2_purple[trajectory_index][1],traj_rangement2_purple[trajectory_index][2]);
+		}
+		else{
+			navigator.move_to(traj_rangement2_yellow[trajectory_index][1],traj_rangement2_yellow[trajectory_index][2]);
+		}
 	}
-	else{
-		navigator.move_to(POS_X_WATER,POS_Y_WATER_ORANGE);
-	}*/
-	Serial.println("reenter");
-	/*if(digitalRead(COLOR) == GREEN){
-		navigator.move_to(1500,-10000);
+
+	else if(trajectory_index >= 1){
+		trajectory_index--;
+		has_reentered = 1;
 	}
-	else{
-		navigator.move_to(1500,-10000);
-	}*/
 }
 
 void RangementChaos::forceLeave(){

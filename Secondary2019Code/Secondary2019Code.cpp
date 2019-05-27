@@ -45,7 +45,7 @@ void setup()
 {
 	pinMode(PIN_LED, OUTPUT);
 	pinMode(MOT_LIDAR, OUTPUT);
-	analogWrite(MOT_LIDAR, 70);
+	analogWrite(MOT_LIDAR, 50); // ARRÊT
 
 	Serial.begin(115200);
 	Serial1.begin(115200);
@@ -76,15 +76,18 @@ int i = 0;
 // The loop function is called in an endless loop
 void loop()
 {
+
 	/*if (Serial1.available()){
 		lidarManager.update();
 		if (lidarManager.lidar.is_packet_available()){
-		if(millis() - deb > 200){
+		if(millis() - deb > 50){
 			deb = millis();
 			Odometry::set_pos(1500, 1300, 90);
 			bool obs_detected = lidarManager.obstacleDetected(170, 190);
 			//Serial.println(obs_detected);
-			Serial.println(lidarManager.lidar.get_distance(180));
+			Serial.print(lidarManager.lidar.get_distance(90));
+			Serial.print("  ");
+			Serial.println(lidarManager.lidar.is_valid(90));
 
 		}
 	}

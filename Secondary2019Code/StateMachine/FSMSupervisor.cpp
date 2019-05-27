@@ -49,7 +49,8 @@ void FSMSupervisor::update() {
 
 	currentState->doIt();
 
-	/*if(Serial1.available()){
+
+	if(Serial1.available()){
 		lidarManager.update();
 	}
 
@@ -84,8 +85,8 @@ void FSMSupervisor::update() {
 				}
 			}
 		}
-	}*/
-	if(currentState->getFlags() & E_ULTRASOUND){
+	}
+/*	if(currentState->getFlags() & E_ULTRASOUND){
 		usManager.update();
 		if(usManager.obstacleDetected()){
 			time_obstacle_left = 0;
@@ -111,7 +112,7 @@ void FSMSupervisor::update() {
 				}
 			}
 		}
-	}
+	}*/
 }
 
 void FSMSupervisor::init(AbstractState* state) {
