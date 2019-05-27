@@ -23,8 +23,25 @@ float traj_recalage1_purple[][3] = { { DISPLACEMENT, 650, 550 },
 		{ TURN, 135, 0 }, { TURN, 90, 0 }, { DISPLACEMENT, 650, 780 }, { TURN,
 				45, 0 }, { TURN, 0, 0 }, { DISPLACEMENT, -15, 780 } };
 
-float traj_recalage1_yellow[][2] =
-		{ { 150, 1200 }, { 500, 1200 }, { 500, 300 } };
+float traj_recalage1_purple[][3] = { {DISPLACEMENT,650,550},
+									{TURN,135,0},
+									{TURN,90,0},
+									{DISPLACEMENT,650,780},
+									{TURN,45,0},
+									{TURN,0,0},
+									{DISPLACEMENT,-15,780}
+};
+
+
+float traj_recalage1_yellow[][3] = { {DISPLACEMENT,2350,550},
+									{TURN,45,0},
+									{TURN,90,0},
+									{DISPLACEMENT,2350,780},
+									{TURN,135,0},
+									{TURN,180,0},
+									{DISPLACEMENT,3015,780}
+};
+
 
 float turn_recalage1_purple[] = { 90, 0 };
 
@@ -53,6 +70,9 @@ void PremierRecalage::enter() {
 	if (tiretteState.get_color() == PURPLE) {
 		navigator.move_to(traj_recalage1_purple[trajectory_index][1], traj_recalage1_purple[trajectory_index][2]);
 	}
+	else{
+		navigator.move_to(traj_recalage1_yellow[trajectory_index][1],traj_recalage1_yellow[trajectory_index][2]);
+	}
 	//Serial.println("Etat premiere recalage");
 
 }
@@ -69,15 +89,15 @@ void PremierRecalage::doIt() {
 			if (tiretteState.get_color() == PURPLE) {
 				Odometry::set_pos(25, 780, 0);
 			} else {
-				Odometry::set_pos(25, 780, 0); //TODO regarder les mesure du cote jaune
+					Odometry::set_pos(2975,780,180);
 			}
 			//fsmSupervisor.setNextState(&recolteChaos);
 			fsmSupervisor.setNextState(&deadState);
-		} else {
+		} 
+		else {
 			if (tiretteState.get_color() == PURPLE) {
 				trajectory_index += 1;
-				if (traj_recalage1_purple[trajectory_index][0]
-						== DISPLACEMENT) {
+				if (traj_recalage1_purple[trajectory_index][0] == DISPLACEMENT) {
 					if (trajectory_index == 3) {
 						angles.angleA = lidar_av1;
 						angles.angleB = lidar_av2;
@@ -86,25 +106,24 @@ void PremierRecalage::doIt() {
 						angles.angleA = lidar_ar1;
 						angles.angleB = lidar_ar2;
 					}
-					navigator.move_to(
-							traj_recalage1_purple[trajectory_index][1],
-							traj_recalage1_purple[trajectory_index][2]);
-
+					navigator.move_to(traj_recalage1_purple[trajectory_index][1], traj_recalage1_purple[trajectory_index][2]);
 				}
-
-			} else if (traj_recalage1_purple[trajectory_index][0] == TURN) {
-				angles.angleA = 0;
-				angles.angleB = 0;
-				navigator.turn_to(traj_recalage1_purple[trajectory_index][1]);
+				else if (traj_recalage1_purple[trajectory_index][0] == TURN) {
+					angles.angleA = 0;
+					angles.angleB = 0;
+					navigator.turn_to(traj_recalage1_purple[trajectory_index][1]);
+				}
 			}
-		}
-	} /*else {
-		//navigator.turn_to(turn_recalage1_yellow[trajectory_index]);
-		trajectory_index += 1;
-		navigator.move_to(traj_recalage1_yellow[trajectory_index][0],
-				traj_recalage1_yellow[trajectory_index][1]);
-	}*/
+			else{
+				trajectory_index += 1;
+				if(traj_recalage1_yellow[trajectory_index][0]==DISPLACEMENT)
+					navigator.move_to(traj_recalage1_yellow[trajectory_index][1],traj_recalage1_yellow[trajectory_index][2]);
+				else if(traj_recalage1_yellow[trajectory_index][0]==TURN)
+					navigator.turn_to(traj_recalage1_yellow[trajectory_index][1] );
+			}
 
+		}
+	}
 }
 
 void PremierRecalage::reEnter(unsigned long interruptTime) {
