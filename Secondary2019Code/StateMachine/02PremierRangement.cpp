@@ -54,6 +54,7 @@ PremierRangement::~PremierRangement() {
 
 void PremierRangement::enter() {
 	has_reentered = 0;
+	//digitalWrite(13, HIGH);
 
 	//Serial.println("Etat premiere recolte");
 

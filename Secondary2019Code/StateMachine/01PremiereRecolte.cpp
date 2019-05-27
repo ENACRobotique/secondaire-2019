@@ -100,6 +100,7 @@ void PremiereRecolte::doIt() {
 			}
 		}
 		else{
+			digitalWrite(13, HIGH);
 			trajectory_index += 1;
 			if(traj_recolte1_yellow[trajectory_index][0]==DISPLACEMENT)
 				navigator.move_to(traj_recolte1_yellow[trajectory_index][1],traj_recolte1_yellow[trajectory_index][2]);
