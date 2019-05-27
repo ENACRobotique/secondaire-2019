@@ -19,8 +19,8 @@
 PremiereRecolte premiereRecolte = PremiereRecolte();
 
 float traj_recolte1_purple[][3] = { {DISPLACEMENT,150,1300},
-									{TURN,45,0},
-									{TURN,0,0},
+									{TURN,44,0},
+									{TURN,-2,0},
 									{DISPLACEMENT,500,1300},
 									{TURN,-45,0},
 									{TURN,-90,0},

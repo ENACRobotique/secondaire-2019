@@ -19,9 +19,6 @@
 
 PremierRecalage premierRecalage = PremierRecalage();
 
-float traj_recalage1_purple[][3] = { { DISPLACEMENT, 650, 550 },
-		{ TURN, 135, 0 }, { TURN, 90, 0 }, { DISPLACEMENT, 650, 780 }, { TURN,
-				45, 0 }, { TURN, 0, 0 }, { DISPLACEMENT, -15, 780 } };
 
 float traj_recalage1_purple[][3] = { {DISPLACEMENT,650,550},
 									{TURN,135,0},
@@ -91,8 +88,8 @@ void PremierRecalage::doIt() {
 			} else {
 					Odometry::set_pos(2975,780,180);
 			}
-			//fsmSupervisor.setNextState(&recolteChaos);
-			fsmSupervisor.setNextState(&deadState);
+			fsmSupervisor.setNextState(&recolteChaos);
+			//fsmSupervisor.setNextState(&deadState);
 		} 
 		else {
 			if (tiretteState.get_color() == PURPLE) {
