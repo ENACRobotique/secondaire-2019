@@ -7,6 +7,7 @@
 
 #include "00TiretteState.h"
 #include "01PremiereRecolte.h"
+#include "01PremiereRecoltey.h"
 #include "Arduino.h"
 #include "../params.h"
 #include "FSMSupervisor.h"
@@ -51,6 +52,8 @@ void TiretteState::enter() {
 	Wire2.setSCL(3);
 	uint8_t USadresses[] = {0X78, 0X74, 0X70, 0X73};
 	usManager.init(USadresses);*/
+	COLOR_BEGIN = PURPLE;
+	//COLOR_BEGIN = YELLOW;
 
 }
 
@@ -72,11 +75,20 @@ void TiretteState::leave() {
 void TiretteState::doIt() {
 	time_start = millis();
 	Serial.println("On entre dans doIt!");
-
+	Serial.print("color : ");
+	Serial.println(COLOR_BEGIN);
 	if (!digitalRead(TIRETTE)) {
+
 		Serial.println("On change d'etat : gooooo!!");
 		time_start = millis();
-		fsmSupervisor.setNextState(&premiereRecolte);
+		if(COLOR_BEGIN == PURPLE){
+			Serial.println("On change d'etat : PURPLE!!");
+			fsmSupervisor.setNextState(&premiereRecolte);
+		}
+		else{
+			Serial.println("On change d'etat : YELLOW!!");
+			fsmSupervisor.setNextState(&premiereRecoltey);
+		}
 	}
 
 }

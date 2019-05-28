@@ -32,21 +32,21 @@ void Navigator::move_to(float x, float y){
 	move_type = DISPLACEMENT;
 	move_state = INITIAL_TURN;
 	trajectory_done = false;
-	/*Serial.print("moving_to : ");
+	Serial.print("moving_to : ");
 	Serial.print(x_target);
 	Serial.print("\t");
-	Serial.println(y_target);*/
+	Serial.println(y_target);
 }
 
 void Navigator::turn_to(float theta){ // En degrés
 	theta_target = center_radian(PI*theta/180);
 
-	Serial.print("Angle: ");
+	/*Serial.print("Angle: ");
 	Serial.println(Odometry::get_pos_theta());
 	Serial.print("moving_to : ");
 	Serial.print(theta_target);
 	Serial.print(" ( <  ");
-	Serial.println(theta);
+	Serial.println(theta);*/
 
 	move_type = TURN;
 	move_state = INITIAL_TURN;

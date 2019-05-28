@@ -50,10 +50,11 @@ public:
 		this->flags = flags;
 	}
 	int has_reentered;
+	struct Angles angles;
 
 protected:
 	unsigned long flags;
-	struct Angles angles;
+
 	//unsigned long time_start;
 };
 
