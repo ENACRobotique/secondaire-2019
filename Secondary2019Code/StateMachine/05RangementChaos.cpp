@@ -92,7 +92,7 @@ void RangementChaos::doIt() {
 				else if(traj_rangement2_purple[trajectory_index][0]==TURN){
 					angles.angleA = 0;
 					angles.angleB = 0;
-					navigator.turn_to(traj_rangement2_purple[trajectory_index][1] );
+					navigator.turn_to(traj_rangement2_purple[trajectory_index][1]);
 					if(trajectory_index == 2){
 						Odometry::set_pos(1000, 400, 180);
 					}
@@ -104,9 +104,15 @@ void RangementChaos::doIt() {
 				trajectory_index += 1;
 				//navigator.move_to(traj_rangement2_yellow[trajectory_index][0],traj_rangement2_yellow[trajectory_index][1]);
 				if(traj_rangement2_yellow[trajectory_index][0]==DISPLACEMENT){
+					if(trajectory_index == 3){
+						angles.angleA = lidar_av1;
+						angles.angleB = lidar_av2;
+					}
 					navigator.move_to(traj_rangement2_yellow[trajectory_index][1],traj_rangement2_yellow[trajectory_index][2]);
 				}
 				else if(traj_rangement2_yellow[trajectory_index][0]==TURN){
+					angles.angleA = 0;
+					angles.angleB = 0;
 					navigator.turn_to(traj_rangement2_yellow[trajectory_index][1] );
 					if(trajectory_index == 2){
 						Odometry::set_pos(2000, 400, 0);
@@ -120,6 +126,8 @@ void RangementChaos::doIt() {
 void RangementChaos::reEnter(unsigned long interruptTime){
 	time_start+=interruptTime;
 	if(trajectory_index == 0){
+		angles.angleA = lidar_ar1;
+		angles.angleB = lidar_ar2;
 		if(tiretteState.get_color() == PURPLE){
 				navigator.move_to(traj_rangement2_purple[trajectory_index][1],traj_rangement2_purple[trajectory_index][2]);
 		}

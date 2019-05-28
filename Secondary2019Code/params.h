@@ -26,6 +26,7 @@ const int MOT1_DIR = 6;
 const int MOT2_PWM = 29;
 const int MOT2_DIR = 28;
 
+const int BATT_CHARGE = 37;
 
 const int US_RANGE = 35;
 const int US_RANGE_DIMINUSHED = 25;

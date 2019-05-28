@@ -50,10 +50,10 @@ PremierRecalage::PremierRecalage() {
 	usDistances.front_right = 0;
 	usDistances.rear_left = 0;
 	usDistances.rear_right = 0;
-	//angles.angleA = lidar_ar1;
-	//angles.angleB = lidar_ar2;
-	angles.angleA = 0;
-	angles.angleB = 0;
+	angles.angleA = lidar_ar1;
+	angles.angleB = lidar_ar2;
+	//angles.angleA = 0;
+	//angles.angleB = 0;
 }
 
 PremierRecalage::~PremierRecalage() {
@@ -100,8 +100,8 @@ void PremierRecalage::doIt() {
 						angles.angleB = lidar_av2;
 					}
 					if (trajectory_index == 6) {
-						angles.angleA = lidar_ar1;
-						angles.angleB = lidar_ar2;
+						angles.angleA = 0;
+						angles.angleB = 0;
 					}
 					navigator.move_to(traj_recalage1_purple[trajectory_index][1], traj_recalage1_purple[trajectory_index][2]);
 				}
@@ -113,10 +113,22 @@ void PremierRecalage::doIt() {
 			}
 			else{
 				trajectory_index += 1;
-				if(traj_recalage1_yellow[trajectory_index][0]==DISPLACEMENT)
+				if(traj_recalage1_yellow[trajectory_index][0]==DISPLACEMENT){
+					if (trajectory_index == 3) {
+						angles.angleA = lidar_av1;
+						angles.angleB = lidar_av2;
+					}
+					if (trajectory_index == 6) {
+						angles.angleA = 0;
+						angles.angleB = 0;
+					}
 					navigator.move_to(traj_recalage1_yellow[trajectory_index][1],traj_recalage1_yellow[trajectory_index][2]);
-				else if(traj_recalage1_yellow[trajectory_index][0]==TURN)
+				}
+				else if(traj_recalage1_yellow[trajectory_index][0]==TURN){
+					angles.angleA = 0;
+					angles.angleB = 0;
 					navigator.turn_to(traj_recalage1_yellow[trajectory_index][1] );
+				}
 			}
 
 		}
@@ -127,6 +139,8 @@ void PremierRecalage::reEnter(unsigned long interruptTime) {
 	time_start += interruptTime;
 
 	if (trajectory_index == 0) {
+		angles.angleA = lidar_ar1;
+		angles.angleB = lidar_ar2;
 		if (tiretteState.get_color() == PURPLE) {
 			navigator.move_to(traj_recalage1_purple[trajectory_index][1], traj_recalage1_purple[trajectory_index][2]);
 		} else {

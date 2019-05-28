@@ -24,7 +24,7 @@ public:
 private:
 	//LidarXV11 lidar = LidarXV11();
 	const int NB_OBSTACLES = 2;
-	const int DIST_MIN = 500;
+	const int DIST_MIN = 350;
 
 };
 

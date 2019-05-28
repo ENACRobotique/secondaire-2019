@@ -50,10 +50,9 @@ void PremiereRecoltey::enter() {
 
 	Serial.println("On entre dans l'état 1");
 
-	if(tiretteState.get_color() == YELLOW){
-		Serial.println("On entre dans l'état 1 YELLOW ");
-		navigator.move_to(parcourt_yellow[0][1],parcourt_yellow[0][2]);
-	}
+	Serial2.println("On entre dans l'état 1 YELLOW ");
+	navigator.move_to(parcourt_yellow[0][1],parcourt_yellow[0][2]);
+
 
 }
 
@@ -108,11 +107,9 @@ void PremiereRecoltey::reEnter(unsigned long interruptTime){
 	time_start+=interruptTime;
 
 	if(trajectory_index == 0){
-		if(tiretteState.get_color() == YELLOW){
-				angles.angleA = lidar_av1;
-				angles.angleB = lidar_av2;
-				navigator.move_to(parcourt_yellow[0][0],parcourt_yellow[0][1]);
-			}
+		angles.angleA = lidar_av1;
+		angles.angleB = lidar_av2;
+		navigator.move_to(parcourt_yellow[0][1],parcourt_yellow[0][2]);
 	}
 
 	else if(trajectory_index >= 1){

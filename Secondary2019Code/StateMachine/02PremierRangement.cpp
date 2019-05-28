@@ -96,9 +96,9 @@ void PremierRangement::doIt() {
 					usDistances.rear_right = 0;
 				}
 				else{
-				angles.angleA = 0;
-				angles.angleB = 0;
-				navigator.move_to(traj_rangement1_purple[trajectory_index][1],traj_rangement1_purple[trajectory_index][2]);
+					angles.angleA = 0;
+					angles.angleB = 0;
+					navigator.move_to(traj_rangement1_purple[trajectory_index][1],traj_rangement1_purple[trajectory_index][2]);
 				}
 			}
 			else if(traj_rangement1_purple[trajectory_index][0]==TURN){
@@ -109,10 +109,18 @@ void PremierRangement::doIt() {
 		}
 		else{
 			trajectory_index += 1;
-			if(traj_rangement1_yellow[trajectory_index][0]==DISPLACEMENT)
-				navigator.move_to(traj_rangement1_yellow[trajectory_index][1],traj_rangement1_yellow[trajectory_index][2]);
-			else if(traj_rangement1_yellow[trajectory_index][0]==TURN)
-				navigator.turn_to(traj_rangement1_yellow[trajectory_index][1] );
+			if(traj_rangement1_yellow[trajectory_index][0]==DISPLACEMENT){
+				if(trajectory_index != 4){
+					angles.angleA = 0;
+					angles.angleB = 0;
+					navigator.move_to(traj_rangement1_yellow[trajectory_index][1],traj_rangement1_yellow[trajectory_index][2]);
+				}
+			}
+			else if(traj_rangement1_yellow[trajectory_index][0]==TURN){
+				angles.angleA = 0;
+				angles.angleB = 0;
+				navigator.turn_to(traj_rangement1_yellow[trajectory_index][1]);
+			}
 		}
 	}
 }

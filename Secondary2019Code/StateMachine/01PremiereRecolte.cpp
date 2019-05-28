@@ -47,7 +47,7 @@ PremiereRecolte::~PremiereRecolte() {
 void PremiereRecolte::enter() {
 	has_reentered = 0;
 
-	Serial.println("On entre dans l'état 1 côté PURPLE ");
+	Serial2.println("On entre dans l'état 1 côté PURPLE ");
 	navigator.move_to(parcourt[0][1],parcourt[0][2]);
 
 }
@@ -94,9 +94,9 @@ void PremiereRecolte::reEnter(unsigned long interruptTime){
 	time_start+=interruptTime;
 
 	if(trajectory_index == 0){
-			angles.angleA = lidar_av1;
-			angles.angleB = lidar_av2;
-			navigator.move_to(parcourt[0][1],parcourt[0][2]);
+		angles.angleA = lidar_av1;
+		angles.angleB = lidar_av2;
+		navigator.move_to(parcourt[0][1],parcourt[0][2]);
 	}
 
 	else if(trajectory_index >= 1){

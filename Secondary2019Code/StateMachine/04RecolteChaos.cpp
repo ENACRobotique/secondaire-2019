@@ -99,10 +99,16 @@ void RecolteChaos::doIt() {
 			else{
 				trajectory_index += 1;
 				if(traj_recolte2_yellow[trajectory_index][0]==DISPLACEMENT){
+					if(trajectory_index == 2){
+						angles.angleA = lidar_av1;
+						angles.angleB = lidar_av2;
+					}
 					navigator.move_to(traj_recolte2_yellow[trajectory_index][1],traj_recolte2_yellow[trajectory_index][2]);
 				}
 				else if(traj_recolte2_yellow[trajectory_index][0]==TURN){
-					navigator.turn_to(traj_recolte2_yellow[trajectory_index][1] );
+					angles.angleA = 0;
+					angles.angleB = 0;
+					navigator.turn_to(traj_recolte2_yellow[trajectory_index][1]);
 				}
 			}
 		}
@@ -112,6 +118,8 @@ void RecolteChaos::doIt() {
 void RecolteChaos::reEnter(unsigned long interruptTime){
 	time_start+=interruptTime;
 	if(trajectory_index == 0){
+		angles.angleA = lidar_ar1;
+		angles.angleB = lidar_ar2;
 		if(tiretteState.get_color() == PURPLE){
 				navigator.move_to(traj_recolte2_purple[trajectory_index][1],traj_recolte2_purple[trajectory_index][2]);
 		}

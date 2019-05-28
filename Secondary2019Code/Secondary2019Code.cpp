@@ -45,13 +45,20 @@ void setup()
 {
 	pinMode(PIN_LED, OUTPUT);
 	pinMode(MOT_LIDAR, OUTPUT);
-	analogWrite(MOT_LIDAR, 50); // ARRÊT
 
-	Serial.begin(115200);
+	pinMode(COLOR,INPUT_PULLUP);
+	pinMode(BATT_CHARGE, INPUT);
+
+
+	int charge_batterie = analogRead(BATT_CHARGE);
+	analogWrite(MOT_LIDAR, 50/750 * charge_batterie);
+	//analogWrite(MOT_LIDAR, 50);
+
+	Serial2.begin(115200);
 	Serial1.begin(115200);
 	//while(!Serial){}
-	Serial.println("INIT Serial");
-
+	Serial2.println("INIT Serial");
+	Serial2.println(BATT_CHARGE);
 	Odometry::init();
 	MotorControl::init();
 	fsmSupervisor.init(&tiretteState);
@@ -76,21 +83,27 @@ int i = 0;
 // The loop function is called in an endless loop
 void loop()
 {
-
+	/*Serial2.print("BATT_CHARGE : ");
+	Serial2.println(analogRead(BATT_CHARGE));*/
+	//Serial2.print("COLOR   ");
+	//Serial2.println(digitalRead(COLOR));
 	/*if (Serial1.available()){
 		lidarManager.update();
+		//Serial2.println("HOLA");
+		//Serial2.print("Distance :   ");
+		//Serial2.println(lidarManager.lidar.get_distance(270));
 		if (lidarManager.lidar.is_packet_available()){
-		if(millis() - deb > 50){
-			deb = millis();
-			Odometry::set_pos(1500, 1300, 90);
-			bool obs_detected = lidarManager.obstacleDetected(170, 190);
-			//Serial.println(obs_detected);
-			Serial.print(lidarManager.lidar.get_distance(90));
-			Serial.print("  ");
-			Serial.println(lidarManager.lidar.is_valid(90));
+				deb = millis();
+				Serial2.println("AAAAA");
+				Odometry::set_pos(1500, 1300, 90);
+				//bool obs_detected = lidarManager.obstacleDetected(170, 190);
+				//Serial.println(obs_detected);
+				Serial.print(lidarManager.lidar.get_distance(90));
+				Serial.print("  ");
+				Serial.println(lidarManager.lidar.is_valid(90));
 
 		}
-	}
+
 	}*/
 
 
