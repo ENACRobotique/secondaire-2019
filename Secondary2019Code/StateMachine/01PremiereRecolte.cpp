@@ -18,13 +18,13 @@
 
 PremiereRecolte premiereRecolte = PremiereRecolte();
 
-float parcourt[][3] = { {DISPLACEMENT,150,1300},
-									{TURN,44,0},
-									{TURN,-2,0},
-									{DISPLACEMENT,500,1300},
-									{TURN,-45,0},
-									{TURN,-90,0},
-									{DISPLACEMENT,500,350}
+float parcourt[][4] = { {DISPLACEMENT,150,1300, 1},     // i = 3 : si 1, lidar activé sinon désactivé
+									{TURN,44,0, 1},
+									{TURN,-2,0, 1},
+									{DISPLACEMENT,500,1300, 1},
+									{TURN,-45,0, 1},
+									{TURN,-90,0, 1},
+									{DISPLACEMENT,500,350, 1}
 };
 
 
@@ -57,6 +57,9 @@ void PremiereRecolte::leave() {
 }
 
 void PremiereRecolte::doIt() {
+	if(trajectory_index <= 6){
+		angles = zone_observation(parcourt[trajectory_index][3],  parcourt[trajectory_index][0]);
+	}
 
 	if(navigator.isTrajectoryFinished() or has_reentered){
 		has_reentered = 0;
@@ -74,13 +77,13 @@ void PremiereRecolte::doIt() {
 		Serial.println(tiretteState.get_color());
 		trajectory_index += 1;
 		if(parcourt[trajectory_index][0]==DISPLACEMENT  and trajectory_index < 7){
-			angles.angleA = lidar_av1;
-			angles.angleB = lidar_av2;
+			/*angles.angleA = lidar_av1;
+			angles.angleB = lidar_av2;*/
 			navigator.move_to(parcourt[trajectory_index][1],parcourt[trajectory_index][2]);
 		}
 		else if(parcourt[trajectory_index][0]==TURN){
-			angles.angleA = 0;
-			angles.angleB = 0;
+			/*angles.angleA = 0;
+			angles.angleB = 0;*/
 			navigator.turn_to(parcourt[trajectory_index][1] );
 			if(trajectory_index == 3){
 				Odometry::set_pos(150, 1300, 0);

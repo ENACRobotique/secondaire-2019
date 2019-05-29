@@ -19,6 +19,8 @@ const int lidar_av1 = 40;
 const int lidar_av2 = 140;
 const int lidar_ar1 = 220;
 const int lidar_ar2 = 320;
+const int lidar_turn1 = 0;
+const int lidar_turn2 = 359;
 
 const int ENCODEUR1_A = 21;
 const int ENCODEUR1_B = 20;

@@ -22,19 +22,19 @@
 DeuxiemeRecalage deuxiemeRecalage = DeuxiemeRecalage();
 
 
-float traj_recalage2_purple[][3] = { {DISPLACEMENT,600,400},
-									{TURN,135,0},
-									{TURN,90,0},
-									{DISPLACEMENT,600,1330},
-									{DISPLACEMENT,600,1400},
+float traj_recalage2_purple[][4] = { {DISPLACEMENT,600,400, 1},
+									{TURN,135,0, 1},
+									{TURN,90,0, 1},
+									{DISPLACEMENT,600,1330, 1},
+									{DISPLACEMENT,600,1400, 0},
 
 };
 
-float traj_recalage2_yellow[][3] = { {DISPLACEMENT,2400,400},
-									{TURN,135,0},
-									{TURN,90,0},
-									{DISPLACEMENT,2400,1330},
-									{DISPLACEMENT,2400,1400},
+float traj_recalage2_yellow[][4] = { {DISPLACEMENT,2400,400, 1},
+									{TURN,135,0, 1},
+									{TURN,90,0, 1},
+									{DISPLACEMENT,2400,1330, 1},
+									{DISPLACEMENT,2400,1400, 0},
 
 };
 
@@ -73,6 +73,9 @@ void DeuxiemeRecalage::leave() {
 }
 
 void DeuxiemeRecalage::doIt() {
+	if(trajectory_index <= 4){
+		angles = zone_observation(traj_recalage2_purple[trajectory_index][3],  traj_recalage2_purple[trajectory_index][0]);
+	}
 	if(navigator.isTrajectoryFinished() or has_reentered){
 		has_reentered = 0;
 		if(trajectory_index == 4){
@@ -88,19 +91,19 @@ void DeuxiemeRecalage::doIt() {
 			if(tiretteState.get_color() == PURPLE){
 				trajectory_index += 1;
 				if(traj_recalage2_purple[trajectory_index][0]==DISPLACEMENT){
-					if(trajectory_index == 3){
+					/*if(trajectory_index == 3){
 						angles.angleA = lidar_av1;
 						angles.angleB = lidar_av2;
 					}
 					else if(trajectory_index == 4){
 						angles.angleA = 0;
 						angles.angleB = 0;
-					}
+					}*/
 					navigator.move_to(traj_recalage2_purple[trajectory_index][1],traj_recalage2_purple[trajectory_index][2]);
 				}
 				else if(traj_recalage2_purple[trajectory_index][0]==TURN){
-					angles.angleA = 0;
-					angles.angleB = 0;
+					/*angles.angleA = 0;
+					angles.angleB = 0;*/
 					navigator.turn_to(traj_recalage2_purple[trajectory_index][1] );
 				}
 
@@ -108,19 +111,19 @@ void DeuxiemeRecalage::doIt() {
 			else{
 				trajectory_index += 1;
 				if(traj_recalage2_yellow[trajectory_index][0]==DISPLACEMENT){
-					if(trajectory_index == 3){
+					/*if(trajectory_index == 3){
 						angles.angleA = lidar_av1;
 						angles.angleB = lidar_av2;
 					}
 					else if(trajectory_index == 4){
 						angles.angleA = 0;
 						angles.angleB = 0;
-					}
+					}*/
 					navigator.move_to(traj_recalage2_yellow[trajectory_index][1],traj_recalage2_yellow[trajectory_index][2]);
 				}
 				else if(traj_recalage2_yellow[trajectory_index][0]==TURN){
-					angles.angleA = 0;
-					angles.angleB = 0;
+					//angles.angleA = 0;
+					//angles.angleB = 0;
 					navigator.turn_to(traj_recalage2_yellow[trajectory_index][1] );
 				}
 			}

@@ -19,13 +19,13 @@
 PremiereRecoltey premiereRecoltey = PremiereRecoltey();
 
 
-float parcourt_yellow[][3] = { {DISPLACEMENT,2850,1300},
-									{TURN,135,0},
-									{TURN,178,0},
-									{DISPLACEMENT,2500,1300},
-									{TURN,-140,0},
-									{TURN,-94,0},
-									{DISPLACEMENT,2500,350}
+float parcourt_yellow[][4] = { {DISPLACEMENT,2850,1300, 1},
+									{TURN,135,0, 1},
+									{TURN,178,0, 1},
+									{DISPLACEMENT,2500,1300, 1},
+									{TURN,-140,0, 1},
+									{TURN,-94,0, 1},
+									{DISPLACEMENT,2500,350, 1}
 };
 
 
@@ -62,7 +62,9 @@ void PremiereRecoltey::leave() {
 
 
 void PremiereRecoltey::doIt() {
-
+	if(trajectory_index <= 6){
+			angles = zone_observation(parcourt_yellow[trajectory_index][3],  parcourt_yellow[trajectory_index][0]);
+		}
 	if(navigator.isTrajectoryFinished() or has_reentered){
 		has_reentered = 0;
 		if(trajectory_index == 7){
@@ -79,8 +81,6 @@ void PremiereRecoltey::doIt() {
 		Serial.println("Entrée dans yellow");
 
 		if(parcourt_yellow[trajectory_index][0]==DISPLACEMENT and trajectory_index < 7){
-			angles.angleA = lidar_av1;
-			angles.angleB = lidar_av2;
 			Serial.println("Entrée dans yellow DISPLACEMENT");
 			Serial.print("consx  :  ");
 			Serial.print(parcourt_yellow[trajectory_index][1]);
@@ -89,8 +89,6 @@ void PremiereRecoltey::doIt() {
 			navigator.move_to(parcourt_yellow[trajectory_index][1],parcourt_yellow[trajectory_index][2]);
 		}
 		else if(parcourt_yellow[trajectory_index][0]==TURN){
-			angles.angleA = 0;
-			angles.angleB = 0;
 			navigator.turn_to(parcourt_yellow[trajectory_index][1] );
 		}
 		if(trajectory_index == 3){

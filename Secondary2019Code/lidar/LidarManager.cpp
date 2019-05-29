@@ -129,3 +129,5 @@ bool LidarManager::obstacleDetected(int lidarAngleA, int lidarAngleB){
 	return(obstacle);
 }
 
+
+

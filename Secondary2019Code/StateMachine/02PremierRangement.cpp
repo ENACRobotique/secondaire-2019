@@ -20,17 +20,17 @@
 
 PremierRangement premierRangement = PremierRangement();
 
-float traj_rangement1_purple[][3] = { {DISPLACEMENT,500,570},
-									{TURN,-141,0},
-									{TURN,-192,0},
-									{DISPLACEMENT,205,550},
+float traj_rangement1_purple[][4] = { {DISPLACEMENT,500,570, 1},
+									{TURN,-141,0, 1},
+									{TURN,-192,0, 1},
+									{DISPLACEMENT,205,550, 0},
 };
 
 
-float traj_rangement1_yellow[][3] = { {DISPLACEMENT,2500,570},
-									{TURN,-32,0},
-									{TURN,4,0},
-									{DISPLACEMENT,2795,550},
+float traj_rangement1_yellow[][4] = { {DISPLACEMENT,2500,570, 1},
+									{TURN,-32,0, 1},
+									{TURN,4,0, 1},
+									{DISPLACEMENT,2795,550, 0},
 };
 
 
@@ -71,6 +71,9 @@ void PremierRangement::leave() {
 }
 
 void PremierRangement::doIt() {
+	if(trajectory_index <= 3){
+			angles = zone_observation(traj_rangement1_purple[trajectory_index][3],  traj_rangement1_purple[trajectory_index][0]);
+	}
 	if(navigator.isTrajectoryFinished() or has_reentered){
 		has_reentered = 0;
 		if(trajectory_index == 3){
@@ -96,14 +99,14 @@ void PremierRangement::doIt() {
 					usDistances.rear_right = 0;
 				}
 				else{
-					angles.angleA = 0;
-					angles.angleB = 0;
+					//angles.angleA = 0;
+					//angles.angleB = 0;
 					navigator.move_to(traj_rangement1_purple[trajectory_index][1],traj_rangement1_purple[trajectory_index][2]);
 				}
 			}
 			else if(traj_rangement1_purple[trajectory_index][0]==TURN){
-				angles.angleA = 0;
-				angles.angleB = 0;
+				//angles.angleA = 0;
+				//angles.angleB = 0;
 				navigator.turn_to(traj_rangement1_purple[trajectory_index][1] );
 			}
 		}
@@ -111,14 +114,14 @@ void PremierRangement::doIt() {
 			trajectory_index += 1;
 			if(traj_rangement1_yellow[trajectory_index][0]==DISPLACEMENT){
 				if(trajectory_index != 4){
-					angles.angleA = 0;
-					angles.angleB = 0;
+					//angles.angleA = 0;
+					//angles.angleB = 0;
 					navigator.move_to(traj_rangement1_yellow[trajectory_index][1],traj_rangement1_yellow[trajectory_index][2]);
 				}
 			}
 			else if(traj_rangement1_yellow[trajectory_index][0]==TURN){
-				angles.angleA = 0;
-				angles.angleB = 0;
+				//angles.angleA = 0;
+				//angles.angleB = 0;
 				navigator.turn_to(traj_rangement1_yellow[trajectory_index][1]);
 			}
 		}

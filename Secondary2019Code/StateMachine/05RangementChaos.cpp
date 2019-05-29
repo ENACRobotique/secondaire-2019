@@ -21,18 +21,18 @@
 RangementChaos rangementChaos = RangementChaos();
 
 
-float traj_rangement2_purple[][3] = { {DISPLACEMENT,1000,400},
-									{TURN,130,0},
-									{TURN,170,0},
-									{DISPLACEMENT,250,400},
+float traj_rangement2_purple[][4] = { {DISPLACEMENT,1000,400, 1},
+									{TURN,130,0, 1},
+									{TURN,170,0, 1},
+									{DISPLACEMENT,250,400, 1},
 
 };
 
 
-float traj_rangement2_yellow[][3] = { {DISPLACEMENT,2000,400},
-									{TURN,45,0},
-									{TURN,5,0},
-									{DISPLACEMENT,2750,400},
+float traj_rangement2_yellow[][4] = { {DISPLACEMENT,2000,400, 1},
+									{TURN,45,0, 1},
+									{TURN,5,0, 1},
+									{DISPLACEMENT,2750,400, 1},
 
 };
 
@@ -61,7 +61,6 @@ void RangementChaos::enter() {
 	}
 	else{
 		navigator.move_to(traj_rangement2_yellow[0][1],traj_rangement2_yellow[0][2]);
-
 	}
 
 }
@@ -71,6 +70,10 @@ void RangementChaos::leave() {
 }
 
 void RangementChaos::doIt() {
+	if(trajectory_index <= 3){
+			angles = zone_observation(traj_rangement2_purple[trajectory_index][3],  traj_rangement2_purple[trajectory_index][0]);
+	}
+
 	if(navigator.isTrajectoryFinished() or has_reentered){
 		has_reentered = 0;
 		if(trajectory_index == 2){
@@ -88,15 +91,15 @@ void RangementChaos::doIt() {
 					Odometry::set_pos(1000, 400, 180);
 				}
 				if(traj_rangement2_purple[trajectory_index][0]==DISPLACEMENT){
-					if(trajectory_index == 3){
+					/*if(trajectory_index == 3){
 						angles.angleA = lidar_av1;
 						angles.angleB = lidar_av2;
-					}
+					}*/
 					navigator.move_to(traj_rangement2_purple[trajectory_index][1],traj_rangement2_purple[trajectory_index][2]);
 				}
 				else if(traj_rangement2_purple[trajectory_index][0]==TURN){
-					angles.angleA = 0;
-					angles.angleB = 0;
+					/*angles.angleA = 0;
+					angles.angleB = 0;*/
 					navigator.turn_to(traj_rangement2_purple[trajectory_index][1]);
 				}
 
@@ -109,15 +112,15 @@ void RangementChaos::doIt() {
 					Odometry::set_pos(2000, 400, 0);
 				}
 				if(traj_rangement2_yellow[trajectory_index][0]==DISPLACEMENT){
-					if(trajectory_index == 3){
+					/*if(trajectory_index == 3){
 						angles.angleA = lidar_av1;
 						angles.angleB = lidar_av2;
-					}
+					}*/
 					navigator.move_to(traj_rangement2_yellow[trajectory_index][1],traj_rangement2_yellow[trajectory_index][2]);
 				}
 				else if(traj_rangement2_yellow[trajectory_index][0]==TURN){
-					angles.angleA = 0;
-					angles.angleB = 0;
+					/*angles.angleA = 0;
+					angles.angleB = 0;*/
 					navigator.turn_to(traj_rangement2_yellow[trajectory_index][1] );
 				}
 			}

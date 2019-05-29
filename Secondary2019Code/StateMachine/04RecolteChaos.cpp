@@ -20,18 +20,18 @@
 RecolteChaos recolteChaos = RecolteChaos();
 
 
-float traj_recolte2_purple[][3] = { {DISPLACEMENT,1000,700},
-									{TURN,45,0},
-									{TURN,90,0},
-									{DISPLACEMENT,1000,1200},
+float traj_recolte2_purple[][4] = { {DISPLACEMENT,1000,700, 1},
+									{TURN,45,0, 1},
+									{TURN,90,0, 1},
+									{DISPLACEMENT,1000,1200, 1},
 
 };
 
 
-float traj_recolte2_yellow[][3] = { {DISPLACEMENT,2000,700},
-									{TURN,135,0},
-									{TURN,90,0},
-									{DISPLACEMENT,2000,1200},
+float traj_recolte2_yellow[][4] = { {DISPLACEMENT,2000,700, 1},
+									{TURN,135,0, 1},
+									{TURN,90,0, 1},
+									{DISPLACEMENT,2000,1200, 1},
 
 };
 
@@ -69,6 +69,9 @@ void RecolteChaos::leave() {
 }
 
 void RecolteChaos::doIt() {
+	if(trajectory_index <= 3){
+		angles = zone_observation(traj_recolte2_purple[trajectory_index][3],  traj_recolte2_purple[trajectory_index][0]);
+	}
 	if(navigator.isTrajectoryFinished() or has_reentered){
 		has_reentered = 0;
 		if(trajectory_index == 3){
@@ -83,15 +86,15 @@ void RecolteChaos::doIt() {
 			if(tiretteState.get_color() == PURPLE){
 				trajectory_index += 1;
 				if(traj_recolte2_purple[trajectory_index][0]==DISPLACEMENT){
-					if(trajectory_index == 3){
+					/*if(trajectory_index == 3){
 						angles.angleA = lidar_av1;
 						angles.angleB = lidar_av2;
-					}
+					}*/
 					navigator.move_to(traj_recolte2_purple[trajectory_index][1],traj_recolte2_purple[trajectory_index][2]);
 				}
 				else if(traj_recolte2_purple[trajectory_index][0]==TURN){
-					angles.angleA = 0;
-					angles.angleB = 0;
+					/*angles.angleA = 0;
+					angles.angleB = 0;*/
 					navigator.turn_to(traj_recolte2_purple[trajectory_index][1] );
 				}
 
@@ -99,15 +102,15 @@ void RecolteChaos::doIt() {
 			else{
 				trajectory_index += 1;
 				if(traj_recolte2_yellow[trajectory_index][0]==DISPLACEMENT){
-					if(trajectory_index == 3){
+					/*if(trajectory_index == 3){
 						angles.angleA = lidar_av1;
 						angles.angleB = lidar_av2;
-					}
+					}*/
 					navigator.move_to(traj_recolte2_yellow[trajectory_index][1],traj_recolte2_yellow[trajectory_index][2]);
 				}
 				else if(traj_recolte2_yellow[trajectory_index][0]==TURN){
-					angles.angleA = 0;
-					angles.angleB = 0;
+					/*angles.angleA = 0;
+					angles.angleB = 0;*/
 					navigator.turn_to(traj_recolte2_yellow[trajectory_index][1]);
 				}
 			}

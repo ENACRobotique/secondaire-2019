@@ -13,6 +13,41 @@
 #include "PauseState.h"
 #include "../params.h"
 #include "../lib/USManager.h"
+#include "../motorControl.h"
+#include "../Navigator.h"
+
+
+struct Angles zone_observation(int activation, float type_mouvement){
+
+	struct Angles angles;
+	if(type_mouvement == DISPLACEMENT){
+		if(activation == 1 && MotorControl::get_cons_speed() > 0){
+			angles.angleA = lidar_av1;
+			angles.angleB = lidar_av2;
+		}
+		else if(activation == 1 && MotorControl::get_cons_speed() < 0){
+			angles.angleA = lidar_ar1;
+			angles.angleB = lidar_ar2;
+		}
+		else{
+			angles.angleA = 0;
+			angles.angleB = 0;
+		}
+	}
+	else if(type_mouvement == TURN){
+		if(activation == 1 && MotorControl::get_cons_omega() != 0){
+			angles.angleA = lidar_turn1;
+			angles.angleB = lidar_turn2;
+		}
+		else{
+			angles.angleA = 0;
+			angles.angleB = 0;
+		}
+	}
+
+	return(angles);
+}
+
 
 
 FSMSupervisor fsmSupervisor = FSMSupervisor();
@@ -56,9 +91,15 @@ void FSMSupervisor::update() {
 
 	if((millis() - deb > 75)){
 		deb = millis();
+		//Serial2.print("Speed :    ");
+		//Serial2.println(MotorControl::get_cons_speed());
 
 		unsigned int angleA = currentState->getAngles().angleA;
 		unsigned int angleB = currentState->getAngles().angleB;
+		Serial2.print("A   ");
+		Serial2.print(angleA);
+		Serial2.print("    B   ");
+		Serial2.println(angleB);
 		//Serial.println(lidarManager.obstacleDetected(angleA, angleB));
 		if(lidarManager.obstacleDetected(angleA, angleB)){
 			time_obstacle_left = 0;

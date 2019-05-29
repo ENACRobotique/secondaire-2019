@@ -11,6 +11,9 @@
 #include "AbstractState.h"
 #include "../lidar/LidarManager.h"
 
+struct Angles zone_observation(int activation, float type_mouvement);
+
+
 class FSMSupervisor {
 public:
 	FSMSupervisor();
