@@ -44,8 +44,8 @@ RecolteChaos::RecolteChaos() {
 	usDistances.front_right = 0;
 	usDistances.rear_left = 0;
 	usDistances.rear_right = 0;
-	angles.angleA = lidar_ar1;
-	angles.angleB = lidar_ar2;
+	angles.angleA = lidar_av1;
+	angles.angleB = lidar_av2;
 }
 
 RecolteChaos::~RecolteChaos() {
@@ -73,7 +73,7 @@ void RecolteChaos::doIt() {
 		has_reentered = 0;
 		if(trajectory_index == 3){
 			mandibuleGauche.write(MANDIBULE_GAUCHE_BAS);
-			mandibuleDroite.write(MANDIBULE_GAUCHE_BAS);
+			mandibuleDroite.write(MANDIBULE_DROITE_BAS);
 			delay(250);
 			fsmSupervisor.setNextState(&rangementChaos);
 			//fsmSupervisor.setNextState(&deadState);
@@ -83,7 +83,7 @@ void RecolteChaos::doIt() {
 			if(tiretteState.get_color() == PURPLE){
 				trajectory_index += 1;
 				if(traj_recolte2_purple[trajectory_index][0]==DISPLACEMENT){
-					if(trajectory_index == 2){
+					if(trajectory_index == 3){
 						angles.angleA = lidar_av1;
 						angles.angleB = lidar_av2;
 					}
@@ -99,7 +99,7 @@ void RecolteChaos::doIt() {
 			else{
 				trajectory_index += 1;
 				if(traj_recolte2_yellow[trajectory_index][0]==DISPLACEMENT){
-					if(trajectory_index == 2){
+					if(trajectory_index == 3){
 						angles.angleA = lidar_av1;
 						angles.angleB = lidar_av2;
 					}
@@ -118,8 +118,8 @@ void RecolteChaos::doIt() {
 void RecolteChaos::reEnter(unsigned long interruptTime){
 	time_start+=interruptTime;
 	if(trajectory_index == 0){
-		angles.angleA = lidar_ar1;
-		angles.angleB = lidar_ar2;
+		angles.angleA = lidar_av1;
+		angles.angleB = lidar_av2;
 		if(tiretteState.get_color() == PURPLE){
 				navigator.move_to(traj_recolte2_purple[trajectory_index][1],traj_recolte2_purple[trajectory_index][2]);
 		}

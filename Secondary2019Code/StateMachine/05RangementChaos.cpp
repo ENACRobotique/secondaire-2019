@@ -73,15 +73,20 @@ void RangementChaos::leave() {
 void RangementChaos::doIt() {
 	if(navigator.isTrajectoryFinished() or has_reentered){
 		has_reentered = 0;
-		if(trajectory_index == 3){
+		if(trajectory_index == 2){
 			mandibuleGauche.write(MANDIBULE_GAUCHE_HAUT);
 			mandibuleDroite.write(MANDIBULE_DROITE_HAUT);
+		}
+		if(trajectory_index == 3){
 			fsmSupervisor.setNextState(&deadState);
 			//fsmSupervisor.setNextState(&deuxiemeRecalage);
 		}
 		else{
 			if(tiretteState.get_color() == PURPLE){
 				trajectory_index += 1;
+				if(trajectory_index == 3){
+					Odometry::set_pos(1000, 400, 180);
+				}
 				if(traj_rangement2_purple[trajectory_index][0]==DISPLACEMENT){
 					if(trajectory_index == 3){
 						angles.angleA = lidar_av1;
@@ -93,9 +98,6 @@ void RangementChaos::doIt() {
 					angles.angleA = 0;
 					angles.angleB = 0;
 					navigator.turn_to(traj_rangement2_purple[trajectory_index][1]);
-					if(trajectory_index == 2){
-						Odometry::set_pos(1000, 400, 180);
-					}
 				}
 
 			}
@@ -103,6 +105,9 @@ void RangementChaos::doIt() {
 				//navigator.turn_to(turn_recalage1_yellow[trajectory_index]);
 				trajectory_index += 1;
 				//navigator.move_to(traj_rangement2_yellow[trajectory_index][0],traj_rangement2_yellow[trajectory_index][1]);
+				if(trajectory_index == 3){
+					Odometry::set_pos(2000, 400, 0);
+				}
 				if(traj_rangement2_yellow[trajectory_index][0]==DISPLACEMENT){
 					if(trajectory_index == 3){
 						angles.angleA = lidar_av1;
@@ -114,9 +119,6 @@ void RangementChaos::doIt() {
 					angles.angleA = 0;
 					angles.angleB = 0;
 					navigator.turn_to(traj_rangement2_yellow[trajectory_index][1] );
-					if(trajectory_index == 2){
-						Odometry::set_pos(2000, 400, 0);
-					}
 				}
 			}
 		}

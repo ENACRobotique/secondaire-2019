@@ -37,7 +37,7 @@ void FSMSupervisor::setNextState(AbstractState* state) {
 
 void FSMSupervisor::update() {
 	if (millis() - tiretteState.get_time_start() > TIME_RACE){
-		fsmSupervisor.setNextState(&deadState); //TODO Créer un état où le robot s'arrête
+		fsmSupervisor.setNextState(&deadState);
 	}
 
 	if(nextState != NULL && nextState != currentState){

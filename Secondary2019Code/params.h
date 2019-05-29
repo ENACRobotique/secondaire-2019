@@ -11,10 +11,14 @@
 
 const unsigned long TIME_RACE = 100000;
 
+/*
 const int lidar_av1 = 80;
 const int lidar_av2 = 100;
-const int lidar_ar1 = 260;
-const int lidar_ar2 = 280;
+*/
+const int lidar_av1 = 40;
+const int lidar_av2 = 140;
+const int lidar_ar1 = 220;
+const int lidar_ar2 = 320;
 
 const int ENCODEUR1_A = 21;
 const int ENCODEUR1_B = 20;

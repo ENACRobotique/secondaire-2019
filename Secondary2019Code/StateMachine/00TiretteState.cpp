@@ -41,15 +41,16 @@ TiretteState::~TiretteState() {
 void TiretteState::enter() {
 	Serial.println("Entrer dans tiretteState");
 	time_start = millis();
+	time_color = millis();
 	Serial.println("Etat tirette");
 
 	int charge_batterie = analogRead(BATT_CHARGE);
 	//analogWrite(MOT_LIDAR, 50/825 * charge_batterie);
-	analogWrite(MOT_LIDAR, 55);
+	//analogWrite(MOT_LIDAR, 55);
 	Serial2.print("charge  ");
 	Serial2.println(charge_batterie);
-	//analogWrite(MOT_LIDAR, (int)((50./825.) * charge_batterie));
-	Serial2.println((float)(50./825.) * charge_batterie);
+	analogWrite(MOT_LIDAR, (int)((50./750.) * charge_batterie));
+	//Serial2.println((float)(50./825.) * charge_batterie);
 	pinMode(TIRETTE,INPUT_PULLUP);
 	pinMode(COLOR,INPUT_PULLUP);
     /*Wire2.begin(I2C_MASTER, 0x00, I2C_PINS_3_4, I2C_PULLUP_EXT, 400000);
@@ -92,11 +93,26 @@ void TiretteState::doIt() {
 	if(digitalRead(COLOR) == PURPLE){
 		Odometry::set_pos(150, 650, 90);
 		COLOR_BEGIN = PURPLE;
+		Serial2.println("PURPLE");
+		if(millis() - time_color > 1000){
+			digitalWrite(13, LOW);
+			time_color = millis();
+		}
+		else if(millis() - time_color > 500){
+			digitalWrite(13, HIGH);
+		}
 	}
 	else{
-		//Serial2.println("GO YELLOW");
+		Serial2.println("GO YELLOW");
 		Odometry::set_pos(2850, 650, 90);
 		COLOR_BEGIN = YELLOW;
+		if(millis() - time_color > 100){
+			digitalWrite(13, LOW);
+			time_color = millis();
+		}
+		else if(millis() - time_color > 50){
+			digitalWrite(13, HIGH);
+		}
 	}
 
 	if (!digitalRead(TIRETTE)) {

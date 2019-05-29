@@ -51,7 +51,7 @@ void setup()
 
 
 	int charge_batterie = analogRead(BATT_CHARGE);
-	analogWrite(MOT_LIDAR, 50/750 * charge_batterie);
+	//analogWrite(MOT_LIDAR, 50/750 * charge_batterie);
 	//analogWrite(MOT_LIDAR, 50);
 
 	Serial2.begin(115200);

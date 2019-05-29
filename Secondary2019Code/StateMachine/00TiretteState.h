@@ -33,6 +33,7 @@ private:
 
 	unsigned long time_start;
 	int COLOR_BEGIN;
+	unsigned long time_color;
 };
 
 extern TiretteState tiretteState;
