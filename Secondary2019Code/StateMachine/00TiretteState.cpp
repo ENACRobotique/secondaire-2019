@@ -8,6 +8,8 @@
 #include "00TiretteState.h"
 #include "01PremiereRecolte.h"
 #include "01PremiereRecoltey.h"
+#include "01Homologation.h"
+#include "01Homologationy.h"
 #include "Arduino.h"
 #include "../params.h"
 #include "FSMSupervisor.h"
@@ -114,17 +116,20 @@ void TiretteState::doIt() {
 			digitalWrite(13, HIGH);
 		}
 	}
-
 	if (!digitalRead(TIRETTE)) {
 		Serial.println("On change d'etat : gooooo!!");
 		time_start = millis();
+		fsmSupervisor.setNextState(&homologation);
 		if(COLOR_BEGIN == PURPLE){
 			Serial.println("On change d'etat : PURPLE!!");
-			fsmSupervisor.setNextState(&premiereRecolte);
+			//fsmSupervisor.setNextState(&premiereRecolte);
+			fsmSupervisor.setNextState(&homologation);
+
 		}
 		else{
 			Serial.println("On change d'etat : YELLOW!!");
-			fsmSupervisor.setNextState(&premiereRecoltey);
+			//fsmSupervisor.setNextState(&premiereRecoltey);
+			fsmSupervisor.setNextState(&homologationy);
 		}
 	}
 
