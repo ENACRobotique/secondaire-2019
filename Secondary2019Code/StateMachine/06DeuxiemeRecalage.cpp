@@ -10,7 +10,7 @@
 #include "05RangementChaos.h"
 #include "06DeuxiemeRecalage.h"
 #include "00TiretteState.h"
-//#include "07AtomeMontee.h"
+#include "07AtomeMontee.h"
 #include "../Navigator.h"
 #include "Arduino.h"
 #include "../params.h"
@@ -85,7 +85,8 @@ void DeuxiemeRecalage::doIt() {
 			else{
 				Odometry::set_pos(2400,1378,90); //TODO regarder les mesure du cote jaune
 			}
-			fsmSupervisor.setNextState(&deadState);
+			//fsmSupervisor.setNextState(&deadState);
+			fsmSupervisor.setNextState(&atomeMontee);
 		}
 		else{
 			if(tiretteState.get_color() == PURPLE){
