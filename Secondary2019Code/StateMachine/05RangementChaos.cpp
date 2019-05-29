@@ -81,8 +81,8 @@ void RangementChaos::doIt() {
 			mandibuleDroite.write(MANDIBULE_DROITE_HAUT);
 		}
 		if(trajectory_index == 3){
-			fsmSupervisor.setNextState(&deadState);
-			//fsmSupervisor.setNextState(&deuxiemeRecalage);
+			//fsmSupervisor.setNextState(&deadState);
+			fsmSupervisor.setNextState(&deuxiemeRecalage);
 		}
 		else{
 			if(tiretteState.get_color() == PURPLE){

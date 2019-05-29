@@ -80,6 +80,7 @@ void FSMSupervisor::update() {
 		nextState->enter();
 		currentState = nextState;
 		nextState = NULL;
+		Serial2.println("ON CHANGE D'ÉTAT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	}
 
 	currentState->doIt();
