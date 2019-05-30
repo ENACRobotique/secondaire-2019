@@ -6,10 +6,10 @@
  */
 
 
-#include "01PremiereRecolte.h"
-#include "02PremierRangement.h"
-#include "03PremierRecalage.h"
 #include "00TiretteState.h"
+#include "01PremiereRecolte.h"
+#include "02RecolteChaos.h"
+
 #include "../Navigator.h"
 #include "Arduino.h"
 #include "../params.h"
@@ -22,24 +22,23 @@ PremiereRecolte premiereRecolte = PremiereRecolte();
 
 
 float parcourt[][4] = { {DISPLACEMENT,500,450, 1},     // i = 3 : si 1, lidar activé sinon désactivé
-									{TURN, 45,0, 0},
-									{TURN, 90,0, 0},
-									{DISPLACEMENT,500,1100, 1},
-									{DISPLACEMENT,500,550, 1},
-									{TURN,135,0, 0},
-									{TURN,180,0, 0},
-									{DISPLACEMENT,200,550, 1}};
+						{TURN, 45,0, 0},
+						{TURN, 90,0, 0},
+						{DISPLACEMENT,500,1100, 1},
+						{DISPLACEMENT,500,550, 1},
+						{TURN,135,0, 0},
+						{TURN,180,0, 0},
+						{DISPLACEMENT,200,550, 1}};
 
 
-float parcourt_yellow[][4] = { {DISPLACEMENT,2500, 450, 1},
-									{TURN, 135,0, 0},
-									{TURN, 90,0, 0},
-									{DISPLACEMENT,2500,1100, 1},
-									{DISPLACEMENT,2500,550, 1},
-									{TURN, 45,0, 0},
-									{TURN, 0,0, 0},
-									{DISPLACEMENT,2800, 550, 1}
-};
+float parcourt_yellow[][4] = {  {DISPLACEMENT,2500, 450, 1},
+								{TURN, 135,0, 0},
+								{TURN, 90,0, 0},
+								{DISPLACEMENT,2500,1100, 1},
+								{DISPLACEMENT,2500,550, 1},
+								{TURN, 45,0, 0},
+								{TURN, 0,0, 0},
+								{DISPLACEMENT,2800, 550, 1}};
 
 
 PremiereRecolte::PremiereRecolte() {
@@ -82,7 +81,7 @@ void PremiereRecolte::doIt() {
 					Serial.print(Odometry::get_pos_x());
 					Serial.print("   y  :  ");
 					Serial.println(Odometry::get_pos_y());
-					fsmSupervisor.setNextState(&premierRecalage);
+					fsmSupervisor.setNextState(&recolteChaos);
 					//fsmSupervisor.setNextState(&deadState);
 					return;
 	}
@@ -112,9 +111,6 @@ void PremiereRecolte::doIt() {
 			}
 			else if(parcourt[trajectory_index][0]==TURN){
 				navigator.turn_to(parcourt[trajectory_index][1] );
-				if(trajectory_index == 3){
-					Odometry::set_pos(150, 1300, 0);
-				}
 			}
 		}
 		else{

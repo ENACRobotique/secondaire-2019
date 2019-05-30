@@ -5,8 +5,11 @@
  *      Author: robot
  */
 
+
 #include "00TiretteState.h"
 #include "01PremiereRecolte.h"
+
+
 #include "Arduino.h"
 #include "../params.h"
 #include "FSMSupervisor.h"
@@ -14,7 +17,6 @@
 #include "../odometry.h"
 #include "../libraries/i2c_t3/i2c_t3.h"
 #include "../lib/USManager.h"
-#include "03PremierRecalage.h"
 
 
 TiretteState tiretteState = TiretteState();
@@ -84,7 +86,7 @@ void TiretteState::doIt() {
 
 
 	if(digitalRead(COLOR) == PURPLE){
-		Serial1.println("PURPLE");
+		//Serial1.println("PURPLE");
 		if(millis() - time_color > 1000){
 			digitalWrite(13, LOW);
 			time_color = millis();
@@ -94,7 +96,7 @@ void TiretteState::doIt() {
 		}
 	}
 	else{
-		Serial1.println("GO YELLOW");
+		//Serial1.println("GO YELLOW");
 		if(millis() - time_color > 100){
 			digitalWrite(13, LOW);
 			time_color = millis();

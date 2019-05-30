@@ -49,11 +49,6 @@ void setup()
 	pinMode(COLOR,INPUT_PULLUP);
 	pinMode(BATT_CHARGE, INPUT);
 
-
-	int charge_batterie = analogRead(BATT_CHARGE);
-	//analogWrite(MOT_LIDAR, 50/750 * charge_batterie);
-	//analogWrite(MOT_LIDAR, 50);
-
 	Serial1.begin(115200);
 	Serial2.begin(115200);
 	//while(!Serial){}
@@ -71,8 +66,6 @@ void setup()
 	mandibuleDroite.attach(SERVO1);
 	mandibuleDroite.write(MANDIBULE_DROITE_HAUT);
 
-	//Serial.println(lidarManager.is_ignored2(1254,1533));
-
 
 }
 
@@ -83,15 +76,6 @@ int i = 0;
 // The loop function is called in an endless loop
 void loop()
 {
-	/*Serial1.print("BATT_CHARGE : ");
-	Serial1.println(analogRead(BATT_CHARGE));*/
-	//Serial1.print("COLOR   ");
-	//Serial1.println(digitalRead(COLOR));
-	//Serial1.println("HOLA");
-	//Serial1.print("Distance :   ");
-
-
-
 	fsmSupervisor.update();
 
 	if(controlTime.check()) {
@@ -101,6 +85,5 @@ void loop()
 
 	if(navigatorTime.check()) {
 		navigator.update();
-
 	}
 }

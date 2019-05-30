@@ -6,10 +6,10 @@
  */
 
 
-#include "03PremierRecalage.h"
-#include "04RecolteChaos.h"
 #include "00TiretteState.h"
-#include "05RangementChaos.h"
+#include "02RecolteChaos.h"
+#include "03RangementChaos.h"
+
 #include "../Navigator.h"
 #include "Arduino.h"
 #include "../params.h"
@@ -54,7 +54,7 @@ RecolteChaos::~RecolteChaos() {
 
 void RecolteChaos::enter() {
 	has_reentered = 0;
-	//Serial.println("Etat premiere recalage");
+	Serial1.println("Etat 2 : Recolte chaos");
 
 	if(tiretteState.get_color() == PURPLE){
 		navigator.move_to(traj_recolte2_purple[0][1],traj_recolte2_purple[0][2]);

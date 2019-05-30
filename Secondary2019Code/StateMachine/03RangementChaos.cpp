@@ -6,11 +6,9 @@
  */
 
 
-#include "04RecolteChaos.h"
-#include "05RangementChaos.h"
 #include "00TiretteState.h"
-#include "06DeuxiemeRecalage.h"
-#include "07AtomeMontee.h"
+#include "03RangementChaos.h"
+
 #include "../Navigator.h"
 #include "Arduino.h"
 #include "../params.h"
@@ -23,19 +21,15 @@ RangementChaos rangementChaos = RangementChaos();
 
 
 float traj_rangement2_purple[][4] = { {DISPLACEMENT,1000,400, 1},
-									{TURN,130,0, 0},
-									{TURN,170,0, 0},
-									{DISPLACEMENT,250,400, 1},
-
-};
+									  {TURN, 135,0, 0},
+									  {TURN, 180,0, 0},
+									  {DISPLACEMENT, 350, 400, 1}};
 
 
 float traj_rangement2_yellow[][4] = { {DISPLACEMENT,2000,400, 1},
-									{TURN,45,0, 0},
-									{TURN,5,0, 0},
-									{DISPLACEMENT,2750,400, 1},
-
-};
+									  {TURN, 45, 0, 0},
+									  {TURN, 0, 0, 0},
+									  {DISPLACEMENT,2650,400, 1}};
 
 RangementChaos::RangementChaos() {
 	trajectory_index = 0;
@@ -55,7 +49,7 @@ RangementChaos::~RangementChaos() {
 
 void RangementChaos::enter() {
 	has_reentered = 0;
-	//Serial.println("Etat premiere recolte");
+	Serial1.println("Etat 03 : Rangement chaos");
 
 	if(tiretteState.get_color() == PURPLE){
 		navigator.move_to(traj_rangement2_purple[0][1],traj_rangement2_purple[0][2]);
@@ -82,48 +76,24 @@ void RangementChaos::doIt() {
 			mandibuleDroite.write(MANDIBULE_DROITE_HAUT);
 		}
 		if(trajectory_index == 3){
-			//fsmSupervisor.setNextState(&deadState);
-			//fsmSupervisor.setNextState(&deuxiemeRecalage);
-			fsmSupervisor.setNextState(&atomeMontee);
-
+			fsmSupervisor.setNextState(&deadState);
 		}
 		else{
+			trajectory_index += 1;
 			if(tiretteState.get_color() == PURPLE){
-				trajectory_index += 1;
-				if(trajectory_index == 3){
-					Odometry::set_pos(1000, 400, 180);
-				}
 				if(traj_rangement2_purple[trajectory_index][0]==DISPLACEMENT){
-					/*if(trajectory_index == 3){
-						angles.angleA = lidar_av1;
-						angles.angleB = lidar_av2;
-					}*/
 					navigator.move_to(traj_rangement2_purple[trajectory_index][1],traj_rangement2_purple[trajectory_index][2]);
 				}
 				else if(traj_rangement2_purple[trajectory_index][0]==TURN){
-					/*angles.angleA = 0;
-					angles.angleB = 0;*/
 					navigator.turn_to(traj_rangement2_purple[trajectory_index][1]);
 				}
 
 			}
 			else{
-				//navigator.turn_to(turn_recalage1_yellow[trajectory_index]);
-				trajectory_index += 1;
-				//navigator.move_to(traj_rangement2_yellow[trajectory_index][0],traj_rangement2_yellow[trajectory_index][1]);
-				if(trajectory_index == 3){
-					Odometry::set_pos(2000, 400, 0);
-				}
 				if(traj_rangement2_yellow[trajectory_index][0]==DISPLACEMENT){
-					/*if(trajectory_index == 3){
-						angles.angleA = lidar_av1;
-						angles.angleB = lidar_av2;
-					}*/
 					navigator.move_to(traj_rangement2_yellow[trajectory_index][1],traj_rangement2_yellow[trajectory_index][2]);
 				}
 				else if(traj_rangement2_yellow[trajectory_index][0]==TURN){
-					/*angles.angleA = 0;
-					angles.angleB = 0;*/
 					navigator.turn_to(traj_rangement2_yellow[trajectory_index][1] );
 				}
 			}

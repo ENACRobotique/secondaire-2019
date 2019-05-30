@@ -16,7 +16,6 @@
 #include "../motorControl.h"
 #include "../Navigator.h"
 
-
 struct Angles zone_observation(int activation, float type_mouvement){
 
 	struct Angles angles;
@@ -47,8 +46,6 @@ struct Angles zone_observation(int activation, float type_mouvement){
 
 	return(angles);
 }
-
-
 
 FSMSupervisor fsmSupervisor = FSMSupervisor();
 
@@ -141,34 +138,6 @@ void FSMSupervisor::update() {
 			isLidarSet = true;
 		}
 	}
-	//TODO On a besoin de ça pour les ultrasons et pour re rentrer
-	/*if(currentState->getFlags() & E_ULTRASOUND){
-		usManager.update();
-		if(usManager.obstacleDetected()){
-			time_obstacle_left = 0;
-			if(currentState != &pauseState){			// on va dans l'état pause
-				currentState->forceLeave();
-				previousState = currentState;
-				currentState = &pauseState;
-				pauseState.enter();
-			}
-
-		}
-		else {
-			if(currentState == &pauseState && previousState != NULL){		// on revient dans l'état précédent !
-				if(time_obstacle_left == 0){
-					time_obstacle_left = millis();
-				}
-				if(millis() - time_obstacle_left > DETECTION_STOP_TIME){ //Permet de ne pas repartir directement quand on ne détecte plus d'adversaires
-					pauseState.leave();
-					previousState->reEnter(pauseState.getPauseTime());
-					currentState = previousState;
-					previousState = &pauseState;
-					time_obstacle_left = 0; //May be useless (just like the primary)
-				}
-			}
-		}
-	}*/
 }
 
 void FSMSupervisor::init(AbstractState* state) {
