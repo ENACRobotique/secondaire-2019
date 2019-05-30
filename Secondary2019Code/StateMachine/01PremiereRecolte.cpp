@@ -8,6 +8,7 @@
 
 #include "01PremiereRecolte.h"
 #include "02PremierRangement.h"
+#include "03PremierRecalage.h"
 #include "00TiretteState.h"
 #include "../Navigator.h"
 #include "Arduino.h"
@@ -18,15 +19,22 @@
 
 PremiereRecolte premiereRecolte = PremiereRecolte();
 
-float parcourt[][4] = { {DISPLACEMENT,150,1300, 1},     // i = 3 : si 1, lidar activé sinon désactivé
+/*float parcourt[][4] = { {DISPLACEMENT,150,1300, 1},     // i = 3 : si 1, lidar activé sinon désactivé
 									{TURN,44,0, 1},
 									{TURN,-2,0, 1},
 									{DISPLACEMENT,500,1300, 1},
 									{TURN,-45,0, 1},
 									{TURN,-90,0, 1},
-									{DISPLACEMENT,500,350, 1}
-};
+									{DISPLACEMENT,500,350, 1}};*/
 
+float parcourt[][4] = { {DISPLACEMENT,500,450, 1},     // i = 3 : si 1, lidar activé sinon désactivé
+									{TURN, 45,0, 1},
+									{TURN, 90,0, 1},
+									{DISPLACEMENT,500,1100, 1},
+									{DISPLACEMENT,500,550, 1},
+									{TURN,135,0, 1},
+									{TURN,180,0, 1},
+									{DISPLACEMENT,200,550, 1}};
 
 PremiereRecolte::PremiereRecolte() {
 	time_start = 0;
@@ -57,20 +65,26 @@ void PremiereRecolte::leave() {
 }
 
 void PremiereRecolte::doIt() {
-	if(trajectory_index <= 6){
+	if(trajectory_index <= 7){
 		angles = zone_observation(parcourt[trajectory_index][3],  parcourt[trajectory_index][0]);
+	}
+
+	if(trajectory_index == 5){
+		mandibuleGauche.write(MANDIBULE_GAUCHE_BAS);
+		mandibuleDroite.write(MANDIBULE_DROITE_BAS);
 	}
 
 	if(navigator.isTrajectoryFinished() or has_reentered){
 		has_reentered = 0;
-		if(trajectory_index == 7){
+		if(trajectory_index == 8){
 			Serial.print("x  :  ");
 			Serial.print(Odometry::get_pos_x());
 			Serial.print("   y  :  ");
 			Serial.println(Odometry::get_pos_y());
-			mandibuleGauche.write(MANDIBULE_GAUCHE_BAS);
-			mandibuleDroite.write(MANDIBULE_DROITE_BAS);
-			fsmSupervisor.setNextState(&premierRangement);
+			mandibuleGauche.write(MANDIBULE_GAUCHE_HAUT);
+			mandibuleDroite.write(MANDIBULE_DROITE_HAUT);
+			//fsmSupervisor.setNextState(&premierRangement);
+			fsmSupervisor.setNextState(&premierRecalage);
 			return;
 		}
 		Serial.print("couleur : ");

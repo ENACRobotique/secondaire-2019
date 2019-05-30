@@ -10,6 +10,7 @@
 #include "05RangementChaos.h"
 #include "00TiretteState.h"
 #include "06DeuxiemeRecalage.h"
+#include "07AtomeMontee.h"
 #include "../Navigator.h"
 #include "Arduino.h"
 #include "../params.h"
@@ -82,7 +83,9 @@ void RangementChaos::doIt() {
 		}
 		if(trajectory_index == 3){
 			//fsmSupervisor.setNextState(&deadState);
-			fsmSupervisor.setNextState(&deuxiemeRecalage);
+			//fsmSupervisor.setNextState(&deuxiemeRecalage);
+			fsmSupervisor.setNextState(&atomeMontee);
+
 		}
 		else{
 			if(tiretteState.get_color() == PURPLE){
