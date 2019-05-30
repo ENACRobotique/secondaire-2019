@@ -52,7 +52,7 @@ struct Angles zone_observation(int activation, float type_mouvement){
 
 FSMSupervisor fsmSupervisor = FSMSupervisor();
 
-FSMSupervisor::FSMSupervisor() {
+FSMSupervisor::FSMSupervisor() : isLidarSet(false), lidarPWM(25), lidarAsservTime(500){
 	// TODO Auto-generated constructor stub
 	nextState = NULL;
 	currentState = NULL;
@@ -86,7 +86,7 @@ void FSMSupervisor::update() {
 	currentState->doIt();
 
 
-	if(Serial1.available()){
+	if(Serial2.available()){
 		lidarManager.update();
 	}
 
@@ -97,14 +97,14 @@ void FSMSupervisor::update() {
 
 		unsigned int angleA = currentState->getAngles().angleA;
 		unsigned int angleB = currentState->getAngles().angleB;
-		/*Serial2.print("A   ");
-		Serial2.print(angleA);
-		Serial2.print("    B   ");
-		Serial2.println(angleB);*/
+		Serial1.print("A   ");
+		Serial1.print(angleA);
+		Serial1.print("    B   ");
+		Serial1.println(angleB);
 		//Serial.println(lidarManager.obstacleDetected(angleA, angleB));
 		if(lidarManager.obstacleDetected(angleA, angleB)){
 			time_obstacle_left = 0;
-			Serial.println("Obstacle detected");
+			Serial1.println("Obstacle detected");
 			if(currentState != &pauseState){			// on va dans l'état pause
 				currentState->forceLeave();
 				previousState = currentState;
@@ -126,6 +126,19 @@ void FSMSupervisor::update() {
 					time_obstacle_left = 0; //May be useless (just like the primary)
 				}
 			}
+		}
+	}
+	if (!isLidarSet && lidarAsservTime.check()){
+		Serial1.print("Speed:");
+		Serial1.println(lidarManager.lidar.getSpeed());
+		if (lidarManager.lidar.getSpeed() >= 260){
+			lidarPWM -= 3;
+			analogWrite(MOT_LIDAR, lidarPWM);
+		}else if (lidarManager.lidar.getSpeed() <= 230){
+			lidarPWM += 3;
+			analogWrite(MOT_LIDAR, lidarPWM);
+		}else{
+			isLidarSet = true;
 		}
 	}
 	//TODO On a besoin de ça pour les ultrasons et pour re rentrer

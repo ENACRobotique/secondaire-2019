@@ -111,7 +111,7 @@ void LidarXV11::update(uint8_t byte) {
 			speed = packet.speed;
 		}
 		else{
-			Serial1.println("LIDAR CHECKSUM INVALID");
+			//Serial1.println("LIDAR CHECKSUM INVALID");
 		}
 		state = WAIT_START;
 		break;

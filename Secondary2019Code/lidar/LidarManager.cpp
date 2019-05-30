@@ -10,12 +10,12 @@
 #include "Arduino.h"
 #include "../odometry.h"
 #include "map.h"
+#include "../params.h"
 
 
 //LidarManager lidarManager = LidarManager();
 
 LidarManager::LidarManager() {
-
 }
 
 LidarManager::~LidarManager() {
@@ -60,8 +60,6 @@ bool LidarManager::is_ignored(int lidarAngle){
 	}
 	else if ((Map::obstacle_map[(int)(y * Map::map_pos_y / Map::table_size_y)][(int)(x * Map::map_pos_x / Map::table_size_x)]) & (0b1 << (7 - (int)(x / Map::PAS) % 8)) ){ // comparaison de carte
 		ignored = true;
-		digitalWrite(13, HIGH);
-
 	}
 
 

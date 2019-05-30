@@ -9,6 +9,7 @@
 #define STATEMACHINE_FSMSUPERVISOR_H_
 
 #include "AbstractState.h"
+#include "Metro.h"
 #include "../lidar/LidarManager.h"
 
 struct Angles zone_observation(int activation, float type_mouvement);
@@ -21,7 +22,7 @@ public:
 	void setNextState(AbstractState* state);
 	void update();
 	void init(AbstractState * state);
-	LidarManager lidarManager = LidarManager();
+	LidarManager lidarManager;
 
 private:
 
@@ -30,6 +31,10 @@ private:
 	AbstractState* previousState;
 	unsigned long time_obstacle_left;
 	int deb;
+	bool isLidarSet;
+	unsigned int lidarPWM;
+	Metro lidarAsservTime;
+
 };
 
 extern FSMSupervisor fsmSupervisor;

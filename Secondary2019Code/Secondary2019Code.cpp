@@ -34,14 +34,9 @@ e/.project
 
 Metro controlTime = Metro((unsigned long)(CONTROL_PERIOD * 1000));
 Metro navigatorTime = Metro(NAVIGATOR_TIME_PERIOD * 1000);
-Metro lidarAsservTime = Metro(500);
 Metro debugLed = Metro(500);
 
-bool isLidarSet = false;
-unsigned int lidarPWM = 25;
-
 int PIN_LED = 13;
-LidarManager lidarManager = LidarManager();
 uint32_t deb;
 
 
@@ -92,10 +87,8 @@ void loop()
 	Serial1.println(analogRead(BATT_CHARGE));*/
 	//Serial1.print("COLOR   ");
 	//Serial1.println(digitalRead(COLOR));
-		lidarManager.update();
-		//Serial1.println("HOLA");
-		//Serial1.print("Distance :   ");
-
+	//Serial1.println("HOLA");
+	//Serial1.print("Distance :   ");
 
 
 
@@ -107,31 +100,7 @@ void loop()
 	}
 
 	if(navigatorTime.check()) {
-		if (isLidarSet){
-			Serial1.print("Distannnnnce : ");
-			if (lidarManager.lidar.is_valid(270)){
-				Serial1.println(lidarManager.lidar.get_distance(270));
-			}else{
-				Serial1.println("0");
-			}
-		}
 		navigator.update();
 
 	}
-
-	if (!isLidarSet && lidarAsservTime.check()){
-		Serial1.print("Speed:");
-		Serial1.println(lidarManager.lidar.getSpeed());
-		if (lidarManager.lidar.getSpeed() >= 260){
-			lidarPWM -= 3;
-			analogWrite(MOT_LIDAR, lidarPWM);
-		}else if (lidarManager.lidar.getSpeed() <= 230){
-			lidarPWM += 3;
-			analogWrite(MOT_LIDAR, lidarPWM);
-		}else{
-			isLidarSet = true;
-		}
-	}
-
-
 }
