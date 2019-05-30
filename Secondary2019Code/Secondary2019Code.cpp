@@ -94,15 +94,16 @@ void loop()
 		//Serial2.println(lidarManager.lidar.get_distance(270));
 		if (lidarManager.lidar.is_packet_available()){
 				deb = millis();
-				Serial2.println("AAAAA");
+				//Serial2.println("AAAAA");
 				Odometry::set_pos(1500, 1300, 90);
 				//bool obs_detected = lidarManager.obstacleDetected(170, 190);
 				//Serial.println(obs_detected);
-				Serial.print(lidarManager.lidar.get_distance(90));
-				Serial.print("  ");
-				Serial.println(lidarManager.lidar.is_valid(90));
+				Serial2.print(lidarManager.lidar.get_distance(90));
+				Serial2.print("  ");
+				Serial2.println(lidarManager.lidar.is_valid(90));
 
 		}
+		Serial2.println("aaaa");
 
 	}*/
 

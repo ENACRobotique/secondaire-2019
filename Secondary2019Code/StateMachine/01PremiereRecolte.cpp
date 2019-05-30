@@ -15,6 +15,7 @@
 #include "FSMSupervisor.h"
 #include "../lib/USManager.h"
 #include "../odometry.h"
+#include "DeadState.h"
 
 PremiereRecolte premiereRecolte = PremiereRecolte();
 
@@ -71,6 +72,7 @@ void PremiereRecolte::doIt() {
 			mandibuleGauche.write(MANDIBULE_GAUCHE_BAS);
 			mandibuleDroite.write(MANDIBULE_DROITE_BAS);
 			fsmSupervisor.setNextState(&premierRangement);
+
 			return;
 		}
 		Serial.print("couleur : ");

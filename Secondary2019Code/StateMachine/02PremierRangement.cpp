@@ -77,8 +77,8 @@ void PremierRangement::doIt() {
 	if(navigator.isTrajectoryFinished() or has_reentered){
 		has_reentered = 0;
 		if(trajectory_index == 3){
-			fsmSupervisor.setNextState(&premierRecalage);
-			//fsmSupervisor.setNextState(&deadState);
+			//fsmSupervisor.setNextState(&premierRecalage);
+			fsmSupervisor.setNextState(&deadState);
 			return;
 		}
 		if(trajectory_index == 2){

@@ -15,11 +15,13 @@
 #include "FSMSupervisor.h"
 #include "../lib/USManager.h"
 #include "../odometry.h"
+#include "DeadState.h"
+
 
 PremiereRecoltey premiereRecoltey = PremiereRecoltey();
 
 
-float parcourt_yellow[][4] = { {DISPLACEMENT,2850,1300, 1},
+float parcourt_yellow[][4] = { {DISPLACEMENT,2700,1300, 1},
 									{TURN,135,0, 1},
 									{TURN,178,0, 1},
 									{DISPLACEMENT,2500,1300, 1},
@@ -92,10 +94,10 @@ void PremiereRecoltey::doIt() {
 			navigator.turn_to(parcourt_yellow[trajectory_index][1] );
 		}
 		if(trajectory_index == 3){
-			Odometry::set_pos(2850,1300,180);
+	//		Odometry::set_pos(2700,1300,180);
 		}
 		else if(trajectory_index == 6){
-			Odometry::set_pos(2500,1300,-90);
+		//	Odometry::set_pos(2500,1300,-90);
 		}
 
 	}

@@ -75,7 +75,7 @@ void TiretteState::leave() {
 	}
 	else{
 		Serial2.println("GO YELLOW");
-		Odometry::set_pos(2850, 650, 90);
+		Odometry::set_pos(2700, 650, 90);
 		COLOR_BEGIN = YELLOW;
 	}
 	/*Odometry::set_pos(150, 650, 90);
@@ -104,7 +104,7 @@ void TiretteState::doIt() {
 	}
 	else{
 		Serial2.println("GO YELLOW");
-		Odometry::set_pos(2850, 650, 90);
+		Odometry::set_pos(2700, 650, 90);
 		COLOR_BEGIN = YELLOW;
 		if(millis() - time_color > 100){
 			digitalWrite(13, LOW);
