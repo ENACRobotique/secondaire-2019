@@ -17,6 +17,7 @@ public:
 	void doIt();
 	void leave();
 	void enter();
+	void enter_bis(int angleA, int angleB);
 	void reEnter(unsigned long interruptTime);
 	void forceLeave();
 	unsigned long getPauseTime();

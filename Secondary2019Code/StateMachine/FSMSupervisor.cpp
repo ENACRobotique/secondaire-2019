@@ -20,13 +20,25 @@ struct Angles zone_observation(int activation, float type_mouvement){
 
 	struct Angles angles;
 	if(type_mouvement == DISPLACEMENT){
-		if(activation == 1 && MotorControl::get_cons_speed() > 0){
-			angles.angleA = lidar_av1;
-			angles.angleB = lidar_av2;
+		if((activation == 1 or activation == 2) && MotorControl::get_cons_speed() > 0){
+			if(activation == 1){
+				angles.angleA = lidar_av1;
+				angles.angleB = lidar_av2;
+			}
+			else if(activation == 2){
+				angles.angleA = lidar_avred1;
+				angles.angleB = lidar_avred2;
+			}
 		}
-		else if(activation == 1 && MotorControl::get_cons_speed() < 0){
-			angles.angleA = lidar_ar1;
-			angles.angleB = lidar_ar2;
+		else if((activation == 1 or activation == 2) && MotorControl::get_cons_speed() < 0){
+			if(activation == 1){
+				angles.angleA = lidar_ar1;
+				angles.angleB = lidar_ar2;
+			}
+			else if(activation == 2){
+				angles.angleA = lidar_arred1;
+				angles.angleB = lidar_arred2;
+			}
 		}
 		else{
 			angles.angleA = 0;
@@ -34,7 +46,7 @@ struct Angles zone_observation(int activation, float type_mouvement){
 		}
 	}
 	else if(type_mouvement == TURN){
-		if(activation == 1 && MotorControl::get_cons_omega() != 0){
+		if((activation == 1 or activation == 2) && MotorControl::get_cons_omega() != 0){
 			angles.angleA = lidar_turn1;
 			angles.angleB = lidar_turn2;
 		}
@@ -87,7 +99,10 @@ void FSMSupervisor::update() {
 		lidarManager.update();
 	}
 
-	if((millis() - deb > 75)){
+	//if((millis() - deb > 75)){ // fonctionne mais bizzare
+	if((millis() - deb > 50)){ // fonctionne mais bizzare
+
+	//if((millis() - deb > 5O)){
 		deb = millis();
 		//Serial2.print("Speed :    ");
 		//Serial2.println(MotorControl::get_cons_speed());
@@ -106,11 +121,12 @@ void FSMSupervisor::update() {
 				currentState->forceLeave();
 				previousState = currentState;
 				currentState = &pauseState;
-				pauseState.enter();
+				//pauseState.enter(angleA, angleB);
+				pauseState.enter_bis(angleA, angleB);
 			}
-
 		}
 		else {
+			//if(currentState == &pauseState && previousState != NULL && !lidarManager.obstacleDetected(angleA, angleB)){		// on revient dans l'état précédent !
 			if(currentState == &pauseState && previousState != NULL){		// on revient dans l'état précédent !
 				if(time_obstacle_left == 0){
 					time_obstacle_left = millis();

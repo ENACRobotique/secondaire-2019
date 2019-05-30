@@ -25,6 +25,16 @@ void PauseState::doIt() {
 void PauseState::leave() {
 }
 
+
+void PauseState::enter_bis(int angleA, int angleB) {
+	Serial.println("Etat pause");
+	angles.angleA= angleA;
+	angles.angleB = angleB;
+	pauseStartTime = millis();
+	navigator.forceStop();
+}
+
+
 void PauseState::enter() {
 	Serial.println("Etat pause");
 	pauseStartTime = millis();

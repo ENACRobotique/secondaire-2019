@@ -21,20 +21,20 @@
 PremiereRecolte premiereRecolte = PremiereRecolte();
 
 
-float parcourt[][4] = { {DISPLACEMENT,500,450, 1},     // i = 3 : si 1, lidar activé sinon désactivé
+float parcourt[][4] = { {DISPLACEMENT,500,450, 2},     // i = 3 : si 1, lidar activé sinon désactivé
 						{TURN, 45,0, 0},
 						{TURN, 90,0, 0},
-						{DISPLACEMENT,500,1100, 1},
+						{DISPLACEMENT,500,1100, 2},
 						{DISPLACEMENT,500,550, 1},
 						{TURN,135,0, 0},
 						{TURN,180,0, 0},
 						{DISPLACEMENT,200,550, 1}};
 
 
-float parcourt_yellow[][4] = {  {DISPLACEMENT,2500, 450, 1},
+float parcourt_yellow[][4] = {  {DISPLACEMENT,2500, 450, 2},
 								{TURN, 135,0, 0},
 								{TURN, 90,0, 0},
-								{DISPLACEMENT,2500,1100, 1},
+								{DISPLACEMENT,2500,1100, 2},
 								{DISPLACEMENT,2500,550, 1},
 								{TURN, 45,0, 0},
 								{TURN, 0,0, 0},

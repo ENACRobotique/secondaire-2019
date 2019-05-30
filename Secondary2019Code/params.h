@@ -15,10 +15,14 @@ const unsigned long TIME_RACE = 100000;
 const int lidar_av1 = 80;
 const int lidar_av2 = 100;
 */
+const int lidar_avred1 = 85;
+const int lidar_avred2 = 95;
 const int lidar_av1 = 40;
 const int lidar_av2 = 140;
 const int lidar_ar1 = 220;
 const int lidar_ar2 = 320;
+const int lidar_arred1 = 265;
+const int lidar_arred2 = 275;
 const int lidar_turn1 = 0;
 const int lidar_turn2 = 359;
 
