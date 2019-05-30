@@ -7,7 +7,6 @@
 
 #include "00TiretteState.h"
 #include "01PremiereRecolte.h"
-#include "01PremiereRecoltey.h"
 #include "Arduino.h"
 #include "../params.h"
 #include "FSMSupervisor.h"
@@ -71,19 +70,13 @@ void TiretteState::leave() {
 	Serial1.print("Color : ");
 	Serial1.println(digitalRead(COLOR) == PURPLE);
 	if(digitalRead(COLOR) == PURPLE){
-		//Odometry::set_pos(150, 350, 90);
-		Odometry::set_pos(150, 450, 0);
+		Odometry::set_pos(50, 450, 0);
 		COLOR_BEGIN = PURPLE;
 	}
 	else{
-		Serial1.println("GO YELLOW");
-		Odometry::set_pos(2700, 650, 90);
+		Odometry::set_pos(2755, 450, 180);
 		COLOR_BEGIN = YELLOW;
 	}
-	/*Odometry::set_pos(150, 650, 90);
-	COLOR_BEGIN = PURPLE;
-	Odometry::set_pos(2850, 650, 90);
-	COLOR_BEGIN = YELLOW;*/
 }
 
 void TiretteState::doIt() {
@@ -91,9 +84,7 @@ void TiretteState::doIt() {
 
 
 	if(digitalRead(COLOR) == PURPLE){
-		Odometry::set_pos(150, 650, 90);
-		COLOR_BEGIN = PURPLE;
-		//Serial1.println("PURPLE");
+		Serial1.println("PURPLE");
 		if(millis() - time_color > 1000){
 			digitalWrite(13, LOW);
 			time_color = millis();
@@ -103,9 +94,7 @@ void TiretteState::doIt() {
 		}
 	}
 	else{
-		//Serial1.println("GO YELLOW");
-		Odometry::set_pos(2700, 650, 90);
-		COLOR_BEGIN = YELLOW;
+		Serial1.println("GO YELLOW");
 		if(millis() - time_color > 100){
 			digitalWrite(13, LOW);
 			time_color = millis();
@@ -116,16 +105,9 @@ void TiretteState::doIt() {
 	}
 
 	if (!digitalRead(TIRETTE)) {
-		Serial.println("On change d'etat : gooooo!!");
+		Serial1.println("On change d'etat : gooooo!!");
 		time_start = millis();
-		if(COLOR_BEGIN == PURPLE){
-			Serial.println("On change d'etat : PURPLE!!");
-			fsmSupervisor.setNextState(&premiereRecolte);
-		}
-		else{
-			Serial.println("On change d'etat : YELLOW!!");
-			fsmSupervisor.setNextState(&premiereRecoltey);
-		}
+		fsmSupervisor.setNextState(&premiereRecolte);
 	}
 
 }

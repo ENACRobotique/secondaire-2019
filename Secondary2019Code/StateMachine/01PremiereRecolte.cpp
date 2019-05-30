@@ -20,22 +20,27 @@
 
 PremiereRecolte premiereRecolte = PremiereRecolte();
 
-/*float parcourt[][4] = { {DISPLACEMENT,150,1300, 1},     // i = 3 : si 1, lidar activé sinon désactivé
-									{TURN,44,0, 1},
-									{TURN,-2,0, 1},
-									{DISPLACEMENT,500,1300, 1},
-									{TURN,-45,0, 1},
-									{TURN,-90,0, 1},
-									{DISPLACEMENT,500,350, 1}};*/
 
 float parcourt[][4] = { {DISPLACEMENT,500,450, 1},     // i = 3 : si 1, lidar activé sinon désactivé
-									{TURN, 45,0, 1},
-									{TURN, 90,0, 1},
+									{TURN, 45,0, 0},
+									{TURN, 90,0, 0},
 									{DISPLACEMENT,500,1100, 1},
 									{DISPLACEMENT,500,550, 1},
-									{TURN,135,0, 1},
-									{TURN,180,0, 1},
+									{TURN,135,0, 0},
+									{TURN,180,0, 0},
 									{DISPLACEMENT,200,550, 1}};
+
+
+float parcourt_yellow[][4] = { {DISPLACEMENT,2500, 450, 1},
+									{TURN, 135,0, 0},
+									{TURN, 90,0, 0},
+									{DISPLACEMENT,2500,1100, 1},
+									{DISPLACEMENT,2500,550, 1},
+									{TURN, 45,0, 0},
+									{TURN, 0,0, 0},
+									{DISPLACEMENT,2800, 550, 1}
+};
+
 
 PremiereRecolte::PremiereRecolte() {
 	time_start = 0;
@@ -55,9 +60,14 @@ PremiereRecolte::~PremiereRecolte() {
 
 void PremiereRecolte::enter() {
 	has_reentered = 0;
-
-	Serial2.println("On entre dans l'état 1 côté PURPLE ");
-	navigator.move_to(parcourt[0][1],parcourt[0][2]);
+	if (tiretteState.get_color() == PURPLE) {
+		Serial1.println("On entre dans l'état 1 côté PURPLE ");
+		navigator.move_to(parcourt[0][1],parcourt[0][2]);
+	}
+	else{
+		Serial1.println("On entre dans l'état 1 YELLOW ");
+		navigator.move_to(parcourt_yellow[0][1],parcourt_yellow[0][2]);
+	}
 
 }
 
@@ -66,45 +76,56 @@ void PremiereRecolte::leave() {
 }
 
 void PremiereRecolte::doIt() {
+
+	if(trajectory_index == 8){
+					Serial.print("x  :  ");
+					Serial.print(Odometry::get_pos_x());
+					Serial.print("   y  :  ");
+					Serial.println(Odometry::get_pos_y());
+					fsmSupervisor.setNextState(&premierRecalage);
+					//fsmSupervisor.setNextState(&deadState);
+					return;
+	}
+
 	if(trajectory_index <= 7){
 		angles = zone_observation(parcourt[trajectory_index][3],  parcourt[trajectory_index][0]);
 	}
 
-	if(trajectory_index == 5){
+	if(trajectory_index == 4){
 		mandibuleGauche.write(MANDIBULE_GAUCHE_BAS);
 		mandibuleDroite.write(MANDIBULE_DROITE_BAS);
 	}
 
-	if(navigator.isTrajectoryFinished() or has_reentered){
-		has_reentered = 0;
-		if(trajectory_index == 8){
-			Serial.print("x  :  ");
-			Serial.print(Odometry::get_pos_x());
-			Serial.print("   y  :  ");
-			Serial.println(Odometry::get_pos_y());
+	if(trajectory_index == 7){
 			mandibuleGauche.write(MANDIBULE_GAUCHE_HAUT);
 			mandibuleDroite.write(MANDIBULE_DROITE_HAUT);
-			//fsmSupervisor.setNextState(&premierRangement);
-			fsmSupervisor.setNextState(&premierRecalage);
-			return;
-		}
-		Serial.print("couleur : ");
-		Serial.println(tiretteState.get_color());
-		trajectory_index += 1;
-		if(parcourt[trajectory_index][0]==DISPLACEMENT  and trajectory_index < 7){
-			/*angles.angleA = lidar_av1;
-			angles.angleB = lidar_av2;*/
-			navigator.move_to(parcourt[trajectory_index][1],parcourt[trajectory_index][2]);
-		}
-		else if(parcourt[trajectory_index][0]==TURN){
-			/*angles.angleA = 0;
-			angles.angleB = 0;*/
-			navigator.turn_to(parcourt[trajectory_index][1] );
-			if(trajectory_index == 3){
-				Odometry::set_pos(150, 1300, 0);
-			}
 		}
 
+
+	if(navigator.isTrajectoryFinished() or has_reentered){
+		has_reentered = 0;
+		trajectory_index += 1;
+		if (tiretteState.get_color() == PURPLE) {
+			Serial.print("Entrée dans purple");
+			if(parcourt[trajectory_index][0]==DISPLACEMENT  and trajectory_index <= 7){
+				navigator.move_to(parcourt[trajectory_index][1],parcourt[trajectory_index][2]);
+			}
+			else if(parcourt[trajectory_index][0]==TURN){
+				navigator.turn_to(parcourt[trajectory_index][1] );
+				if(trajectory_index == 3){
+					Odometry::set_pos(150, 1300, 0);
+				}
+			}
+		}
+		else{
+				Serial.println("Entrée dans yellow");
+				if(parcourt_yellow[trajectory_index][0]==DISPLACEMENT and trajectory_index <= 7){
+					navigator.move_to(parcourt_yellow[trajectory_index][1],parcourt_yellow[trajectory_index][2]);
+				}
+				else if(parcourt_yellow[trajectory_index][0]==TURN){
+					navigator.turn_to(parcourt_yellow[trajectory_index][1] );
+				}
+		}
 	}
 }
 

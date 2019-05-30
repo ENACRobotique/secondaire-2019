@@ -23,8 +23,8 @@ float traj_montee_purple[][4] = { {DISPLACEMENT, 600, 400, 1}, //{DISPLACEMENT, 
 								//{TURN,135,0, 1},
 								//{TURN,180,0, 1},
 								{DISPLACEMENT, 150, 1800, 1},
-								{TURN, 70, 0, 1},
-								{TURN, 0, 0, 1},
+								{TURN, 70, 0, 0},
+								{TURN, 0, 0, 0},
 								//{DISPLACEMENT, 1100, 1800, 0},
 								{DISPLACEMENT, 700, 1800, 0},
 								{DISPLACEMENT, 1063, 1800, 0}};
@@ -35,8 +35,8 @@ float traj_montee_yellow[][4] = { {DISPLACEMENT, 2400, 400, 1},
 								//{TURN, 45,0, 1},
 								//{TURN, 0,0, 1},
 								{DISPLACEMENT, 2850, 1800, 1},
-								{TURN, 135, 0, 1},
-								{TURN, 180, 0, 1},
+								{TURN, 135, 0, 0},
+								{TURN, 180, 0, 0},
 								{DISPLACEMENT, 2300, 1800, 0},
 								{DISPLACEMENT, 1937, 1800, 0}};
 
@@ -79,6 +79,11 @@ void AtomeMontee::doIt() {
 	if(trajectory_index == 6){
 		fsmSupervisor.setNextState(&deadState);
 	}
+
+	if(trajectory_index == 1){
+			fsmSupervisor.setNextState(&deadState);
+	}
+
 	if(trajectory_index <= 5){
 		angles = zone_observation(traj_montee_purple[trajectory_index][3],  traj_montee_purple[trajectory_index][0]);
 	}

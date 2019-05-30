@@ -23,16 +23,16 @@ RangementChaos rangementChaos = RangementChaos();
 
 
 float traj_rangement2_purple[][4] = { {DISPLACEMENT,1000,400, 1},
-									{TURN,130,0, 1},
-									{TURN,170,0, 1},
+									{TURN,130,0, 0},
+									{TURN,170,0, 0},
 									{DISPLACEMENT,250,400, 1},
 
 };
 
 
 float traj_rangement2_yellow[][4] = { {DISPLACEMENT,2000,400, 1},
-									{TURN,45,0, 1},
-									{TURN,5,0, 1},
+									{TURN,45,0, 0},
+									{TURN,5,0, 0},
 									{DISPLACEMENT,2750,400, 1},
 
 };

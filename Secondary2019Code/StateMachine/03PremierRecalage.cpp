@@ -21,21 +21,21 @@ PremierRecalage premierRecalage = PremierRecalage();
 
 
 float traj_recalage1_purple[][4] = { {DISPLACEMENT,650,550, 1},
-									{TURN,135,0, 1},
-									{TURN,90,0, 1},
+									{TURN,135,0, 0},
+									{TURN,90,0, 0},
 									{DISPLACEMENT,650,780, 1},
-									{TURN,45,0, 1},
-									{TURN,0,0, 1},
+									{TURN,45,0, 0},
+									{TURN,0,0, 0},
 									{DISPLACEMENT,-30,780, 0}
 };
 
 
 float traj_recalage1_yellow[][4	] = { {DISPLACEMENT,2350,550, 1},
-									{TURN,45,0, 1},
-									{TURN,90,0, 1},
+									{TURN,45,0, 0},
+									{TURN,90,0, 0},
 									{DISPLACEMENT,2350,780, 1},
-									{TURN,135,0, 1},
-									{TURN,180,0, 1},
+									{TURN,135,0, 0},
+									{TURN,180,0, 0},
 									{DISPLACEMENT,3030,780, 0}
 };
 

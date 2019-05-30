@@ -21,17 +21,17 @@ RecolteChaos recolteChaos = RecolteChaos();
 
 
 float traj_recolte2_purple[][4] = { {DISPLACEMENT,1000,700, 1},
-									{TURN,45,0, 1},
-									{TURN,90,0, 1},
-									{DISPLACEMENT,1000,1200, 1},
+									{TURN,45,0, 0},
+									{TURN,90,0, 0},
+									{DISPLACEMENT,1000,1150, 1},
 
 };
 
 
 float traj_recolte2_yellow[][4] = { {DISPLACEMENT,2000,700, 1},
-									{TURN,135,0, 1},
-									{TURN,90,0, 1},
-									{DISPLACEMENT,2000,1200, 1},
+									{TURN,135,0, 0},
+									{TURN,90,0, 0},
+									{DISPLACEMENT,2000,1150, 1},
 
 };
 
