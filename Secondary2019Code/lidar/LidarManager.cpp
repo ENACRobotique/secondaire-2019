@@ -25,8 +25,8 @@ void LidarManager::init() {
 }
 
 void LidarManager::update() {
-	if(Serial1.available()<1)return;
-	uint8_t b = Serial1.read();
+	if(Serial2.available()<1)return;
+	uint8_t b = Serial2.read();
 	lidar.update(b);
 }
 

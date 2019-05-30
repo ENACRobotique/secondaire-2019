@@ -16,6 +16,7 @@
 #include "FSMSupervisor.h"
 #include "../lib/USManager.h"
 #include "../odometry.h"
+#include "DeadState.h"
 
 PremiereRecolte premiereRecolte = PremiereRecolte();
 

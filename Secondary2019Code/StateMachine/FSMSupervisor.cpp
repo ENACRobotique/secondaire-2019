@@ -97,10 +97,10 @@ void FSMSupervisor::update() {
 
 		unsigned int angleA = currentState->getAngles().angleA;
 		unsigned int angleB = currentState->getAngles().angleB;
-		Serial2.print("A   ");
+		/*Serial2.print("A   ");
 		Serial2.print(angleA);
 		Serial2.print("    B   ");
-		Serial2.println(angleB);
+		Serial2.println(angleB);*/
 		//Serial.println(lidarManager.obstacleDetected(angleA, angleB));
 		if(lidarManager.obstacleDetected(angleA, angleB)){
 			time_obstacle_left = 0;

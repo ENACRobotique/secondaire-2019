@@ -47,10 +47,11 @@ void TiretteState::enter() {
 	int charge_batterie = analogRead(BATT_CHARGE);
 	//analogWrite(MOT_LIDAR, 50/825 * charge_batterie);
 	//analogWrite(MOT_LIDAR, 55);
-	Serial2.print("charge  ");
-	Serial2.println(charge_batterie);
-	analogWrite(MOT_LIDAR, (int)((50./750.) * charge_batterie));
-	//Serial2.println((float)(50./825.) * charge_batterie);
+	Serial1.print("charge  ");
+	Serial1.println(charge_batterie);
+	//analogWrite(MOT_LIDAR, (int)((50./750.) * charge_batterie));
+	//analogWrite(MOT_LIDAR, 50);
+	//Serial1.println((float)(50./825.) * charge_batterie);
 	pinMode(TIRETTE,INPUT_PULLUP);
 	pinMode(COLOR,INPUT_PULLUP);
     /*Wire2.begin(I2C_MASTER, 0x00, I2C_PINS_3_4, I2C_PULLUP_EXT, 400000);
@@ -65,18 +66,18 @@ void TiretteState::enter() {
 }
 
 void TiretteState::leave() {
-	Serial2.print("COLOR  ");
-	Serial2.println(digitalRead(COLOR));
-	Serial2.print("Color : ");
-	Serial2.println(digitalRead(COLOR) == PURPLE);
+	Serial1.print("COLOR  ");
+	Serial1.println(digitalRead(COLOR));
+	Serial1.print("Color : ");
+	Serial1.println(digitalRead(COLOR) == PURPLE);
 	if(digitalRead(COLOR) == PURPLE){
 		//Odometry::set_pos(150, 350, 90);
 		Odometry::set_pos(150, 450, 0);
 		COLOR_BEGIN = PURPLE;
 	}
 	else{
-		Serial2.println("GO YELLOW");
-		Odometry::set_pos(2850, 350, 90);
+		Serial1.println("GO YELLOW");
+		Odometry::set_pos(2700, 650, 90);
 		COLOR_BEGIN = YELLOW;
 	}
 	/*Odometry::set_pos(150, 650, 90);
@@ -87,14 +88,12 @@ void TiretteState::leave() {
 
 void TiretteState::doIt() {
 	time_start = millis();
-	Serial.println("On entre dans doIt!");
-	Serial.print("color : ");
-	Serial.println(COLOR_BEGIN);
+
 
 	if(digitalRead(COLOR) == PURPLE){
 		Odometry::set_pos(150, 650, 90);
 		COLOR_BEGIN = PURPLE;
-		Serial2.println("PURPLE");
+		//Serial1.println("PURPLE");
 		if(millis() - time_color > 1000){
 			digitalWrite(13, LOW);
 			time_color = millis();
@@ -104,8 +103,8 @@ void TiretteState::doIt() {
 		}
 	}
 	else{
-		Serial2.println("GO YELLOW");
-		Odometry::set_pos(2850, 650, 90);
+		//Serial1.println("GO YELLOW");
+		Odometry::set_pos(2700, 650, 90);
 		COLOR_BEGIN = YELLOW;
 		if(millis() - time_color > 100){
 			digitalWrite(13, LOW);
