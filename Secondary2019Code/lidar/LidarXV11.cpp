@@ -7,7 +7,7 @@
 
 #include "LidarXV11.h"
 
-LidarXV11::LidarXV11() {
+LidarXV11::LidarXV11() : speed(0){
 	state = WAIT_START;
 	packet = {0};
 	packet_available = false;
@@ -24,7 +24,7 @@ LidarXV11::~LidarXV11() {
 
 void LidarXV11::update(uint8_t byte) {
 	uint16_t checksum_rx;
-	//Serial.println(state);
+	//Serial1.write(byte);
 	switch (state) {
 	case WAIT_START:
 		if (byte == 0xFA){
@@ -108,9 +108,10 @@ void LidarXV11::update(uint8_t byte) {
 		checksum_rx = (byte << 8) | tmp;
 		if (checksum == checksum_rx){
 			packet_available = true;
+			speed = packet.speed;
 		}
 		else{
-			Serial.println("LIDAR CHECKSUM INVALID");
+			Serial1.println("LIDAR CHECKSUM INVALID");
 		}
 		state = WAIT_START;
 		break;

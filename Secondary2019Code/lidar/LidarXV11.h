@@ -47,11 +47,13 @@ public:
 	struct Package_Data get_packet(){
 		return(packet);
 	}
+	float getSpeed(){
+		return(speed);
+	}
 
 private:
 	void read_data(int i);
 
-	HardwareSerial serial;
 	enum State state;
 	struct Package_Data packet;
 	bool packet_available;
@@ -64,6 +66,7 @@ private:
 	uint16_t checksum;
 	int distance_angle[360];
 	int valid_angle[360];
+	float speed;
 };
 
 #endif /* LIDARXV11_H_ */
