@@ -71,7 +71,7 @@ void PremiereRecolte::enter() {
 }
 
 void PremiereRecolte::leave() {
-	delay(250);
+	//delay(250);
 }
 
 void PremiereRecolte::doIt() {
@@ -131,10 +131,15 @@ void PremiereRecolte::reEnter(unsigned long interruptTime){
 	if(trajectory_index == 0){
 		angles.angleA = lidar_av1;
 		angles.angleB = lidar_av2;
-		navigator.move_to(parcourt[0][1],parcourt[0][2]);
+		if(tiretteState.get_color() == PURPLE){
+				navigator.move_to(parcourt[trajectory_index][1],parcourt[trajectory_index][2]);
+		}
+		else{
+			navigator.move_to(parcourt_yellow[trajectory_index][1],parcourt_yellow[trajectory_index][2]);
+		}
 	}
 
-	else if(trajectory_index >= 1){
+	 if(trajectory_index >= 1){
 		trajectory_index--;
 		has_reentered = 1;
 	}
