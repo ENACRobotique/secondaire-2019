@@ -8,8 +8,6 @@
 
 #include "00TiretteState.h"
 #include "01PremiereRecolte.h"
-
-
 #include "Arduino.h"
 #include "../params.h"
 #include "FSMSupervisor.h"
@@ -17,6 +15,7 @@
 #include "../odometry.h"
 #include "../libraries/i2c_t3/i2c_t3.h"
 #include "../lib/USManager.h"
+#include "05Balance.h"
 
 
 TiretteState tiretteState = TiretteState();
@@ -73,10 +72,12 @@ void TiretteState::leave() {
 	Serial1.println(digitalRead(COLOR) == PURPLE);
 	if(digitalRead(COLOR) == PURPLE){
 		Odometry::set_pos(245, 450, 0);
+		//Odometry::set_pos(350, 700, -90);
 		COLOR_BEGIN = PURPLE;
 	}
 	else{
 		Odometry::set_pos(2755, 450, 180);
+		//Odometry::set_pos(2650, 700, -90);
 		COLOR_BEGIN = YELLOW;
 	}
 }
@@ -110,6 +111,7 @@ void TiretteState::doIt() {
 		Serial1.println("On change d'etat : gooooo!!");
 		time_start = millis();
 		fsmSupervisor.setNextState(&premiereRecolte);
+		//fsmSupervisor.setNextState(&balance);
 	}
 
 }

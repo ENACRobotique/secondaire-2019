@@ -8,6 +8,9 @@
 
 #include "00TiretteState.h"
 #include "03RangementChaos.h"
+#include "04Recalage.h"
+#include "05Balance.h"
+
 
 #include "../Navigator.h"
 #include "Arduino.h"
@@ -20,16 +23,17 @@
 RangementChaos rangementChaos = RangementChaos();
 
 
-float traj_rangement2_purple[][4] = { {DISPLACEMENT,1000,400, 1},
-									  {TURN, 135,0, 0},
-									  {TURN, 180,0, 0},
-									  {DISPLACEMENT, 350, 400, 1}};
+float traj_rangement2_purple[][4] = { {DISPLACEMENT,350,1050, 1},
+									  {TURN, -45,0, 0},
+									  {TURN, -90,0, 0},
+									  {DISPLACEMENT,350, 700, 1}
+									  };
 
 
-float traj_rangement2_yellow[][4] = { {DISPLACEMENT,2000,400, 1},
-									  {TURN, 45, 0, 0},
-									  {TURN, 0, 0, 0},
-									  {DISPLACEMENT,2650,400, 1}};
+float traj_rangement2_yellow[][4] = { {DISPLACEMENT,2650,1050, 1},
+									  {TURN, -135,0, 0},
+									  {TURN, -90,0, 0},
+									  {DISPLACEMENT,2650, 700, 1}};
 
 RangementChaos::RangementChaos() {
 	trajectory_index = 0;
@@ -76,7 +80,8 @@ void RangementChaos::doIt() {
 			mandibuleDroite.write(MANDIBULE_DROITE_HAUT);
 		}
 		if(trajectory_index == 3){
-			fsmSupervisor.setNextState(&deadState);
+			//fsmSupervisor.setNextState(&balance);
+			fsmSupervisor.setNextState(&recalage);
 		}
 		else{
 			trajectory_index += 1;
