@@ -1,22 +1,22 @@
 /*
- * BasculePalets.h
+ * MonteeAtome.h
  *
  *  Created on: 23 mai 2019
  *      Author: robot
  */
 
-#ifndef STATEMACHINE_BASCULEPALETS_H_
-#define STATEMACHINE_BASCULEPALETS_H_
+#ifndef STATEMACHINE_MONTEEATOME_H_
+#define STATEMACHINE_MONTEEATOME_H_
 
 
 #include "AbstractState.h"
 #include "../lib/USManager.h"
 
 
-class BasculePalets : public AbstractState {
+class MonteeAtome : public AbstractState {
 public:
-	BasculePalets();
-	virtual ~BasculePalets();
+	MonteeAtome();
+	virtual ~MonteeAtome();
 
 	void doIt();
 	void leave();
@@ -33,7 +33,7 @@ private:
 	USDistances usDistances;
 };
 
-extern BasculePalets basculePalets;
+extern MonteeAtome monteeAtome;
 
 
-#endif /* STATEMACHINE_BASCULEPALETS_H_ */
+#endif /* STATEMACHINE_MONTEEATOME_H_ */

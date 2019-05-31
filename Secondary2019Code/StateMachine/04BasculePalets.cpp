@@ -8,7 +8,7 @@
 
 #include "00TiretteState.h"
 #include "04BasculePalets.h"
-#include "02RecolteChaos.h"
+#include "05MonteeAtome.h"
 
 #include "../Navigator.h"
 #include "Arduino.h"
@@ -21,8 +21,8 @@
 BasculePalets basculePalets = BasculePalets();
 
 
-float bascule_purple[][4] = {{DISPLACEMENT,175,2000, 0},
-							 {DISPLACEMENT, 175, 1800, 0},
+float bascule_purple[][4] = {{DISPLACEMENT,175,1835, 0},
+							 {DISPLACEMENT, 175, 1700, 0},
 							 {DISPLACEMENT,175, 2050, 0},
 							 {DISPLACEMENT, 175, 1800, 0},
 							 {TURN, 135, 0, 0},
@@ -50,7 +50,10 @@ BasculePalets::~BasculePalets() {
 
 void BasculePalets::enter() {
 	has_reentered = 0;
+
 	if (tiretteState.get_color() == PURPLE) {
+		mandibuleGauche.write(MANDIBULE_GAUCHE_INTER);
+		mandibuleDroite.write(MANDIBULE_DROITE_INTER);
 		Serial1.println("On entre dans l'état 4 côté PURPLE ");
 		navigator.move_to(bascule_purple[0][1],bascule_purple[0][2]);
 	}
@@ -66,27 +69,38 @@ void BasculePalets::leave() {
 }
 
 void BasculePalets::doIt() {
-
-	if(navigator.isTrajectoryFinished() and trajectory_index == 5){
-					Serial.print("x  :  ");
-					Serial.print(Odometry::get_pos_x());
-					Serial.print("   y  :  ");
-					Serial.println(Odometry::get_pos_y());
-					fsmSupervisor.setNextState(&deadState);
-					//fsmSupervisor.setNextState(&deadState);
-					return;
+	if(trajectory_index <= 5){
+				angles = zone_observation(bascule_purple[trajectory_index][3],  bascule_purple[trajectory_index][0]);
 	}
-	if(navigator.isTrajectoryFinished()){
-		trajectory_index++;
-		if (trajectory_index == 1){
-			mandibuleGauche.write(MANDIBULE_GAUCHE_INTER);
-			mandibuleDroite.write(MANDIBULE_DROITE_INTER);
+
+	if(navigator.isTrajectoryFinished() or has_reentered){
+		has_reentered = 0;
+		if(trajectory_index == 1){
+			mandibuleGauche.write(MANDIBULE_GAUCHE_HAUT);
+			mandibuleDroite.write(MANDIBULE_DROITE_HAUT);
 		}
-		if (tiretteState.get_color() == PURPLE) {
-			navigator.move_to(bascule_purple[trajectory_index][1],bascule_purple[trajectory_index][2]);
+		if(trajectory_index == 5){
+			fsmSupervisor.setNextState(&monteeAtome);
 		}
 		else{
-			navigator.move_to(bascule_yellow[trajectory_index][1],bascule_yellow[trajectory_index][2]);
+			trajectory_index += 1;
+			if(tiretteState.get_color() == PURPLE){
+				if(bascule_purple[trajectory_index][0]==DISPLACEMENT){
+					navigator.move_to(bascule_purple[trajectory_index][1],bascule_purple[trajectory_index][2]);
+				}
+				else if(bascule_purple[trajectory_index][0]==TURN){
+					navigator.turn_to(bascule_purple[trajectory_index][1]);
+				}
+
+			}
+			else{
+				if(bascule_yellow[trajectory_index][0]==DISPLACEMENT){
+					navigator.move_to(bascule_yellow[trajectory_index][1],bascule_yellow[trajectory_index][2]);
+				}
+				else if(bascule_yellow[trajectory_index][0]==TURN){
+					navigator.turn_to(bascule_yellow[trajectory_index][1] );
+				}
+			}
 		}
 	}
 }
@@ -95,7 +109,17 @@ void BasculePalets::reEnter(unsigned long interruptTime){
 	time_start+=interruptTime;
 
 	if(trajectory_index == 0){
-		navigator.move_to(bascule_purple[0][1],bascule_purple[0][2]);
+		if(tiretteState.get_color() == PURPLE){
+				navigator.move_to(bascule_purple[trajectory_index][1],bascule_purple[trajectory_index][2]);
+		}
+		else{
+			navigator.move_to(bascule_yellow[trajectory_index][1],bascule_yellow[trajectory_index][2]);
+		}
+	}
+
+	else if(trajectory_index >= 1){
+		trajectory_index--;
+		has_reentered = 1;
 	}
 }
 
