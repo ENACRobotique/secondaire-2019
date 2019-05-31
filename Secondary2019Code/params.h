@@ -91,6 +91,8 @@ const int MANDIBULE_DROITE_BAS = 135;
 const int MANDIBULE_GAUCHE_BAS = 150;
 const int MANDIBULE_DROITE_HAUT = 0;
 const int MANDIBULE_GAUCHE_HAUT = 25;
+const int MANDIBULE_DROITE_INTER = 35;
+const int MANDIBULE_GAUCHE_INTER = 55;
 
 const int GREEN = 1;
 const int ORANGE = !GREEN;

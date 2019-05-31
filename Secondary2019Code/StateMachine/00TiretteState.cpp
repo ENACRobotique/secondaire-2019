@@ -8,6 +8,7 @@
 
 #include "00TiretteState.h"
 #include "01PremiereRecolte.h"
+#include "04BasculePalets.h"
 
 
 #include "Arduino.h"
@@ -29,6 +30,7 @@ Servo mandibuleDroite = Servo();
 unsigned long time_us = 0;
 TiretteState::TiretteState() {
 	time_start = 0;
+	time_color = 0;
 	flags = E_ULTRASOUND;
 	COLOR_BEGIN = PURPLE;
 	angles.angleA = 80;
@@ -72,7 +74,7 @@ void TiretteState::leave() {
 	Serial1.print("Color : ");
 	Serial1.println(digitalRead(COLOR) == PURPLE);
 	if(digitalRead(COLOR) == PURPLE){
-		Odometry::set_pos(245, 450, 0);
+		Odometry::set_pos(175, 1200, 90);
 		COLOR_BEGIN = PURPLE;
 	}
 	else{
@@ -84,6 +86,8 @@ void TiretteState::leave() {
 void TiretteState::doIt() {
 	time_start = millis();
 
+	mandibuleGauche.write(MANDIBULE_GAUCHE_INTER);
+	mandibuleDroite.write(MANDIBULE_DROITE_INTER);
 
 	if(digitalRead(COLOR) == PURPLE){
 		//Serial1.println("PURPLE");
@@ -109,7 +113,7 @@ void TiretteState::doIt() {
 	if (!digitalRead(TIRETTE)) {
 		Serial1.println("On change d'etat : gooooo!!");
 		time_start = millis();
-		fsmSupervisor.setNextState(&premiereRecolte);
+		fsmSupervisor.setNextState(&basculePalets);
 	}
 
 }
