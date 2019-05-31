@@ -72,7 +72,7 @@ void TiretteState::leave() {
 	Serial1.print("Color : ");
 	Serial1.println(digitalRead(COLOR) == PURPLE);
 	if(digitalRead(COLOR) == PURPLE){
-		Odometry::set_pos(50, 450, 0);
+		Odometry::set_pos(245, 450, 0);
 		COLOR_BEGIN = PURPLE;
 	}
 	else{
