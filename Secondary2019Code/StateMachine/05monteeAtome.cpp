@@ -67,7 +67,7 @@ void BasculePalets::leave() {
 
 void BasculePalets::doIt() {
 
-	if(navigator.isTrajectoryFinished() and trajectory_index == 5){
+	if(navigator.isTrajectoryFinished() and trajectory_index == 3){
 					Serial.print("x  :  ");
 					Serial.print(Odometry::get_pos_x());
 					Serial.print("   y  :  ");
