@@ -25,7 +25,7 @@ Recalage recalage = Recalage();
 float traj_recalage_purple[][4] = { {DISPLACEMENT, 350, 1050, 1},
 									  {TURN, -45,0, 0},
 									  {TURN, 0,0, 0},
-									  {DISPLACEMENT,-50, 1050, 0},
+									  {DISPLACEMENT,-75, 1050, 0},
 									  {DISPLACEMENT, 175, 1050, 1},
 									  {TURN, 45,0, 0},
 									  {TURN, 90,0, 0}};
@@ -34,7 +34,7 @@ float traj_recalage_purple[][4] = { {DISPLACEMENT, 350, 1050, 1},
 float traj_recalage_yellow[][4] = { {DISPLACEMENT, 2650, 1050, 1},
 									  {TURN, -135,0, 0},
 									  {TURN, -180,0, 0},
-									  {DISPLACEMENT,3050, 1050, 0},
+									  {DISPLACEMENT,3075, 1050, 0},
 									  {DISPLACEMENT, 2825, 1050, 1},
 									  {TURN, 135,0, 0},
 									  {TURN, 90,0, 0}};
