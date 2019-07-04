@@ -21,8 +21,8 @@
 PremiereRecolte premiereRecolte = PremiereRecolte();
 
 
-float parcourt[][4] = { {DISPLACEMENT,500,450, 2},     // i = 3 : si 1, lidar activé sinon désactivé
-						{TURN, 45,0, 0},
+float parcourt[][4] = { {DISPLACEMENT,500,450, 2},     	// le premier champ dit si on tourne ou si l'on avance / recule, le deuxième est la position cible en x et le troisième en y,
+						{TURN, 45,0, 0},				// le dernier donne des idnications sur le lidar : s'il vaut 0, le lidar est désactivé,sinon le numéro, indique quel angle on regarde avec le lidar.
 						{TURN, 90,0, 0},
 						{DISPLACEMENT,500,1100, 2},
 						{DISPLACEMENT,500,550, 1},
@@ -58,6 +58,7 @@ PremiereRecolte::~PremiereRecolte() {
 }
 
 void PremiereRecolte::enter() {
+	// on fait le premier mouvement dans le enter, car le doIt commence par if(navigator.isTrajectoryFinished() or has_reentered), et que l'on reste donc bloquer  si on met tous dans le doIt
 	has_reentered = 0;
 	if (tiretteState.get_color() == PURPLE) {
 		Serial1.println("On entre dans l'état 1 côté PURPLE ");
@@ -74,8 +75,9 @@ void PremiereRecolte::leave() {
 	//delay(250);
 }
 
-void PremiereRecolte::doIt() {
-
+void PremiereRecolte::doIt() {// TODO Pour 2020, mettre le trajectory_index += 1; à la fin et pas au début, ça rendra le truc beaucoup plus naturel
+	// on rentre dedans en boucle, donc il ne faut pas mettre 2 déplacements dans la même boucle, sinon on va juste ignorer le premier
+	// on code les évènements spéciaux (bouger les pinces, faire un recalage) avec les if(trajectory_index == n)
 	if(trajectory_index == 8){
 					Serial.print("x  :  ");
 					Serial.print(Odometry::get_pos_x());
@@ -86,7 +88,7 @@ void PremiereRecolte::doIt() {
 					return;
 	}
 
-	if(trajectory_index <= 7){
+	if(trajectory_index <= 7){//gère la zone d'observation du lidar
 		angles = zone_observation(parcourt[trajectory_index][3],  parcourt[trajectory_index][0]);
 	}
 
@@ -125,7 +127,7 @@ void PremiereRecolte::doIt() {
 	}
 }
 
-void PremiereRecolte::reEnter(unsigned long interruptTime){
+void PremiereRecolte::reEnter(unsigned long interruptTime){//
 	time_start+=interruptTime;
 
 	if(trajectory_index == 0){
